@@ -26,6 +26,11 @@
 :root{--space-1:8px;--space-2:16px;--space-3:24px;--space-4:32px;--space-6:48px;--space-8:64px;--header-height:72px;scroll-padding-top:calc(var(--header-height) + 24px)}
 .site-header{position:sticky;top:0;z-index:20;width:100%;height:auto;border-bottom:1px solid var(--line);background:var(--bg)}
 .header-inner{height:var(--header-height);display:flex;align-items:center;justify-content:space-between}
+.site-header{background:var(--bg)}
+@supports(backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px)){
+  .site-header{background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);border-bottom-color:color-mix(in srgb,var(--line) 70%,transparent)}
+}
+@media(prefers-reduced-transparency:reduce){.site-header{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
 .site-header nav{gap:32px}.site-header nav a{font-size:.875rem;min-height:44px;display:flex;align-items:center}
 .site-header nav a[aria-current=location]{color:var(--accent)}
 .work-region{position:relative}
