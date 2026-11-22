@@ -1,0 +1,39 @@
+name: Publish portfolio
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Type PUBLISH after reviewing content, social links, CV and imagery'
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: inputs.publish == 'PUBLISH'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/configure-pages@v5
+      - name: Stage website only
+        run: |
+          mkdir _site
+          cp index.html styles.css app.js content.js _site/
+          cp -R assets _site/assets
+          touch _site/.nojekyll
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

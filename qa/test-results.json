@@ -1,0 +1,29 @@
+{
+  "baseURL": "http://127.0.0.1:4173",
+  "results": [
+    {
+      "name": "layout and project navigation at 1440x900",
+      "status": "pass"
+    },
+    {
+      "name": "layout and project navigation at 390x844",
+      "status": "pass"
+    },
+    {
+      "name": "theme and motion preferences persist after reload",
+      "status": "pass"
+    },
+    {
+      "name": "system reduced motion disables decorative animation",
+      "status": "pass"
+    },
+    {
+      "name": "keyboard access and storage failure remain usable",
+      "status": "pass"
+    },
+    {
+      "name": "unfinished social and CV destinations are not misleading links",
+      "status": "pass"
+    }
+  ]
+}
