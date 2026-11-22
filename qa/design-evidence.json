@@ -6,7 +6,7 @@
   ],
   "accessibility": {
     "status": "pass",
-    "evidence": "Playwright verified keyboard skip-link focus and visible focus outline, functional labelled controls, OS reduced-motion suppression, working controls with unavailable local storage, and no dead placeholder links. Source and rendered review checked legible body text, theme contrast and representative-image labels. This is a focused review, not a full WCAG certification. Second pass: pointer spotlight response tested; manual pause clears card variables and stops all running animations. Seven browser checks pass."
+    "evidence": "Playwright verified keyboard skip-link focus and visible focus outline, functional labelled controls, OS reduced-motion suppression, working controls with unavailable local storage, and no dead placeholder links. Source and rendered review checked legible body text, theme contrast and representative-image labels. This is a focused review, not a full WCAG certification. Second pass: pointer spotlight response tested; manual pause clears card variables and stops all running animations. Seven browser checks pass. Profile update: nine browser checks pass, including mobile cross-project jumps and active aria-current tracking, plus actual theme SVG changes under system and persisted preferences."
   },
   "responsive": {
     "status": "pass",
@@ -53,6 +53,11 @@
       "viewport": "1440x900",
       "artifact": "alternate-theme.png",
       "observation": "Inspected dark-theme full-page capture with two-column project sections and representative visuals."
+    },
+    {
+      "viewport": "390x844",
+      "artifact": "navigator-mobile.png",
+      "observation": "Inspected sticky wrapping navigator with active DRM-YOLO link and visible project heading after direct navigation."
     }
   ]
 }

@@ -26,6 +26,14 @@
       "status": "pass"
     },
     {
+      "name": "project navigator jumps between distant details and tracks active section",
+      "status": "pass"
+    },
+    {
+      "name": "theme symbol follows theme, persisted preference, and system changes",
+      "status": "pass"
+    },
+    {
       "name": "unfinished social and CV destinations are not misleading links",
       "status": "pass"
     }

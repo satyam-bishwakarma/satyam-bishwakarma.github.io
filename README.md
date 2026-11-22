@@ -33,3 +33,9 @@ Motion respects the operating system's reduced-motion preference even when the m
 ## Verification
 
 With the preview server running on port 4173, run `node tests/smoke.mjs`. The script uses the locally installed Playwright and Brave; override `PLAYWRIGHT_MODULE` and `BROWSER_PATH` for another machine, and `PORTFOLIO_URL` for another preview URL. It checks desktop/mobile layout, project navigation, asset loading, theme/motion persistence, reduced motion, keyboard focus, storage failure, and placeholders. Screenshots are generated locally under `qa/` and excluded from Git; `qa/test-results.json` records the most recent run. No numerical coverage claim is made for this browser smoke suite.
+
+## Profile and navigation update
+
+The profile content was checked against the current GitHub profile README on 22 November 2026. All four projects are represented, including DRM-YOLO with its planned-submission status. Three featured previews retain the concise opening; the fourth has a direct link beside the work heading. Confirmed X and LinkedIn URLs now work; CV remains unavailable until supplied. The about section includes the complete toolkit, quantitative foundations and education.
+
+The sticky project navigator stays available throughout the case studies, with direct links to each project and the overview. Its active state follows scrolling using `aria-current="location"`; anchors preserve deep links and browser history. Destination sections receive keyboard focus. The theme control shows the action: sun to switch to light, moon to switch to dark, including system and stored preference changes.

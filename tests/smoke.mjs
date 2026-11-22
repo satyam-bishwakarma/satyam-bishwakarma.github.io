@@ -143,6 +143,40 @@ try {
     } finally { await context.close(); }
   });
 
+  await check('project navigator jumps between distant details and tracks active section', async () => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    try {
+      const { page } = await visit(context);
+      await page.locator('.project-card').last().click();
+      await page.waitForFunction(() => location.hash === '#water-quality');
+      const navigator = page.getByRole('navigation', { name: 'Project navigator' });
+      await navigator.getByRole('link', { name: 'Read Scalable image-processing infrastructure' }).click();
+      await page.waitForFunction(() => location.hash === '#image-infrastructure');
+      await page.waitForFunction(() => document.querySelector('#project-navigation a[aria-current]')?.getAttribute('href') === '#image-infrastructure');
+      const bounds = await navigator.boundingBox();
+      assert.ok(bounds.y >= 0 && bounds.y < 30, 'Navigator stays at viewport top');
+      await navigator.getByRole('link', { name: 'Read DRM-YOLO object detection' }).click();
+      assert.equal(await page.locator('#drm-yolo').isVisible(), true);
+      await page.screenshot({ path: `${artifacts}navigator-mobile.png` });
+    } finally { await context.close(); }
+  });
+
+  await check('theme symbol follows theme, persisted preference, and system changes', async () => {
+    const context = await browser.newContext({ colorScheme: 'light' });
+    try {
+      const { page } = await visit(context);
+      const button = page.locator('#theme');
+      const moon = await button.locator('path').getAttribute('d');
+      await page.emulateMedia({ colorScheme: 'dark' });
+      await page.waitForFunction(() => document.querySelector('#theme').dataset.icon === 'sun');
+      assert.notEqual(await button.locator('path').getAttribute('d'), moon);
+      await button.click();
+      assert.equal(await button.getAttribute('data-icon'), 'moon');
+      await page.reload({ waitUntil: 'networkidle' });
+      assert.equal(await button.getAttribute('data-icon'), 'moon');
+    } finally { await context.close(); }
+  });
+
   await check('unfinished social and CV destinations are not misleading links', async () => {
     const context = await browser.newContext();
     try {

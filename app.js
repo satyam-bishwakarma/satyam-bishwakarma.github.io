@@ -41,8 +41,8 @@
     const card = element('a', 'project-card'); card.href = `#${project.id}`;
     const preview = element('div', 'project-preview'); preview.append(projectImage(project), element('span', 'preview-caption', 'Illustrative preview'));
     const copy = element('div', 'card-copy'); copy.append(element('p', 'category', project.category), element('h3', '', project.title), element('p', '', project.short), element('span', 'read-case', 'Read the project'));
-    card.append(preview, copy); document.getElementById('project-grid').append(card);
-    const section = element('article', 'case-study'); section.id = project.id;
+    card.append(preview, copy); if (project.id !== 'drm-yolo') document.getElementById('project-grid').append(card);
+    const section = element('article', 'case-study'); section.id = project.id; section.tabIndex = -1;
     const description = element('div'); description.append(element('p', 'category', project.status), element('h3', '', project.heading), element('p', '', project.description));
     [['My contribution', project.contribution], ['Evidence & limitations', project.evidence]].forEach(([label, text]) => { const p = element('p'); p.append(element('span', 'detail-label', label), document.createTextNode(text)); description.append(p); });
     const tags = element('div', 'tags'); project.tags.forEach(tag => tags.append(element('span', '', tag))); description.append(tags);
@@ -54,7 +54,7 @@
   const root = document.documentElement;
   const themeButton = document.getElementById('theme');
   const media = matchMedia('(prefers-color-scheme: dark)');
-  function updateThemeLabel() { const dark = root.dataset.theme ? root.dataset.theme === 'dark' : media.matches; themeButton.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`); document.querySelector('meta[name="theme-color"]').content = dark ? '#14151a' : '#f6f7fa'; }
+  function updateThemeLabel() { const dark = root.dataset.theme ? root.dataset.theme === 'dark' : media.matches; themeButton.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`); themeButton.dataset.icon = dark ? 'sun' : 'moon'; themeButton.querySelector('path').setAttribute('d', dark ? 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42' : 'M20.6 13.3A8.7 8.7 0 0 1 10.7 3.4 8.8 8.8 0 1 0 20.6 13.3Z'); document.querySelector('meta[name="theme-color"]').content = dark ? '#14151a' : '#f6f7fa'; }
   themeButton.addEventListener('click', () => { const dark = root.dataset.theme ? root.dataset.theme === 'dark' : media.matches; root.dataset.theme = dark ? 'light' : 'dark'; try { localStorage.setItem('portfolio-theme', root.dataset.theme); } catch {} updateThemeLabel(); });
   media.addEventListener('change', updateThemeLabel); updateThemeLabel();
   const motionButton = document.getElementById('motion');
