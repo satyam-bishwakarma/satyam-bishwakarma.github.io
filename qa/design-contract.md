@@ -27,3 +27,5 @@ Hierarchy refinement: sticky global header; subordinate flat project index with 
 Supplied-effects adaptation: PillNav-inspired behavior applies to the global navigation only. AnimatedContent-inspired short staggered entrances use visible fallbacks, never disappearance or scrub; figures alone use blur. Pointer light is offset and unoutlined.
 
 Current migration supersedes earlier two-row navigation: React provides one global pill navigation and an accessible project picker. GSAP owns reveal effects, Vite bundles dependencies. Cursor is an arrow with ultramarine edge and shadow; native pointer is restored on pause/reduced motion/touch/editable fields.
+
+Latest preference: default system cursor only, no custom overlay or cursor effects. Single Projects disclosure contains Overview and all project links, alongside About and Connect.

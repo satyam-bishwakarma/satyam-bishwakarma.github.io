@@ -33,10 +33,3 @@ nav a{position:relative}nav a::after{content:"";position:absolute;bottom:7px;lef
 :root[data-motion=off] .trajectory{stroke-dashoffset:0}
 @media(prefers-reduced-motion:reduce){.project-card,.project-preview img{transform:none!important}.project-card::after{opacity:0!important}}
 @media(prefers-reduced-motion:reduce){*::before,*::after{animation:none!important;transition:none!important}.trajectory{stroke-dashoffset:0}}
-/* Arrow silhouette with an ultramarine edge; its tip follows the pointer exactly. */
-.cursor-halo{position:fixed;left:0;top:0;width:26px;height:34px;z-index:100;pointer-events:none;visibility:hidden}
-.cursor-halo svg{width:26px;height:34px;overflow:visible;filter:drop-shadow(0 0 3px color-mix(in srgb,var(--accent) 60%,transparent)) drop-shadow(0 2px 3px #0002)}
-.cursor-halo path{fill:var(--surface);stroke:var(--accent);stroke-width:1.25;stroke-linejoin:round}
-@media(hover:hover) and (pointer:fine){.cursor-halo[data-active=true]{visibility:visible}:root[data-custom-cursor=on],:root[data-custom-cursor=on] *{cursor:none!important}}
-:root[data-motion=off] .cursor-halo{display:none}
-@media(prefers-reduced-motion:reduce){.cursor-halo{display:none}}

@@ -151,14 +151,9 @@ try {
       await page.waitForFunction(() => document.querySelector('.project-card').style.getPropertyValue('--spot-x') !== '', null, { timeout: 3000 });
       const spot = await card.evaluate(node => node.style.getPropertyValue('--spot-x'));
       assert.ok(spot.endsWith('px'));
-      assert.equal(await page.locator('.cursor-halo').getAttribute('data-active'), 'true');
-      assert.equal(await page.locator('.cursor-halo path').count(), 1, 'Custom cursor is an arrow silhouette');
-      assert.notEqual(await page.locator('.cursor-halo path').evaluate(node => getComputedStyle(node).stroke), 'none');
-      assert.equal(await page.locator('html').getAttribute('data-custom-cursor'), 'on');
+      assert.equal(await page.locator('.cursor-halo').count(), 0, 'Default cursor has no custom overlay');
       await page.locator('#motion').click();
       assert.equal(await card.evaluate(node => node.style.getPropertyValue('--spot-x')), '');
-      assert.equal(await page.locator('.cursor-halo').evaluate(node => getComputedStyle(node).display), 'none');
-      assert.equal(await page.locator('.cursor-halo').getAttribute('data-active'), 'false');
       assert.equal(await page.locator('html').getAttribute('data-custom-cursor'), null, 'Pause restores native cursor');
       assert.ok(await page.locator('.intro-copy, .project-figure, .card-copy, .project-preview').evaluateAll(nodes => nodes.every(node => !node.style.transform && !node.style.filter && !node.style.opacity)), 'GSAP reveal styles are cleared when motion is paused');
       assert.equal(await page.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').length), 0);
@@ -173,7 +168,7 @@ try {
       const nav = page.getByRole('navigation', { name: 'Main navigation', exact: true });
       assert.equal(await page.getByRole('navigation').count(), 1, 'One navigation landmark, no second bar');
       await page.locator('.project-card').last().click();
-      const picker = nav.getByRole('button', { name: 'Browse projects' });
+      const picker = nav.getByRole('button', { name: 'Projects', exact: true });
       await clickStickyControl(page, picker);
       await nav.getByRole('link', { name: 'Read Scalable image-processing infrastructure' }).click();
       await page.waitForFunction(() => location.hash === '#image-infrastructure');
@@ -194,7 +189,7 @@ try {
       assert.equal(await picker.getAttribute('aria-expanded'), 'false');
       assert.equal(await picker.evaluate(node => node === document.activeElement), true);
       await clickStickyControl(page, picker);
-      await nav.getByRole('link', { name: /All projects/ }).click();
+      await nav.getByRole('link', { name: 'Overview', exact: true }).click();
       await page.waitForFunction(() => location.hash === '#work');
       assert.equal(await page.locator('.project-card').count(), 4);
       await nav.getByRole('link', { name: 'About', exact: true }).click();

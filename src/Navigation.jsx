@@ -6,7 +6,7 @@ const PROJECT_LABELS = {
   'drm-yolo': 'DRM-YOLO',
   'water-quality': 'Water quality'
 };
-const ITEMS = [{ id: 'work', label: 'Work' }, { id: 'about', label: 'About' }, { id: 'connect', label: 'Connect' }];
+const ITEMS = [{ id: 'work', label: 'Projects' }, { id: 'about', label: 'About' }, { id: 'connect', label: 'Connect' }];
 
 export default function Navigation({ projects }) {
   const [open, setOpen] = useState(false);
@@ -86,22 +86,26 @@ export default function Navigation({ projects }) {
     }}>
       <div className="unified-nav__track">
         {ITEMS.map(item => (
-          <React.Fragment key={item.id}>
-            <a ref={node => { linkRefs.current[item.id] = node; }} href={`#${item.id}`} className="unified-nav__link"
+          item.id === 'work' ? (
+            <button key={item.id} ref={node => { toggleRef.current = node; linkRefs.current.work = node; }} type="button"
+              className="unified-nav__link unified-nav__projects" aria-label="Projects"
+              aria-current={current.section === 'work' ? 'location' : undefined}
+              aria-expanded={open} aria-controls="project-menu" onClick={() => setOpen(value => !value)}>
+              <span className="unified-nav__face">Projects</span><span className="unified-nav__face-alt" aria-hidden="true">Projects</span>
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
+            </button>
+          ) : (
+            <a key={item.id} ref={node => { linkRefs.current[item.id] = node; }} href={`#${item.id}`} className="unified-nav__link"
               aria-label={item.label} aria-current={current.section === item.id ? 'location' : undefined} onClick={navigate}>
               <span className="unified-nav__face">{item.label}</span><span className="unified-nav__face-alt" aria-hidden="true">{item.label}</span>
             </a>
-            {item.id === 'work' && <button ref={toggleRef} type="button" className="unified-nav__toggle" aria-label="Browse projects"
-              aria-expanded={open} aria-controls="project-menu" onClick={() => setOpen(value => !value)}>
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
-            </button>}
-          </React.Fragment>
+          )
         ))}
         <span className="unified-nav__dot" aria-hidden="true" style={{ left: indicator }} />
       </div>
       {open && <div id="project-menu" className="unified-nav__menu" aria-label="Projects">
         <p className="unified-nav__caption">Research &amp; engineering</p>
-        <a href="#work" onClick={navigate} aria-current={current.section === 'work' && !current.project ? 'location' : undefined} aria-label="All projects">All projects<span>Overview</span></a>
+        <a href="#work" onClick={navigate} aria-current={current.section === 'work' && !current.project ? 'location' : undefined} aria-label="Overview">Overview<span>All projects</span></a>
         {projects.map(project => <a key={project.id} href={`#${project.id}`} aria-label={`Read ${project.heading}`}
           aria-current={current.project === project.id ? 'location' : undefined} onClick={navigate}>
           {PROJECT_LABELS[project.id] || project.heading}<span>{project.category}</span>
