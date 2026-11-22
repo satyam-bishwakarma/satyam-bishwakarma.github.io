@@ -7,6 +7,29 @@
   const cards = [...document.querySelectorAll('.project-card')];
   const activeAnimations = new Set();
   const allowed = () => !reduced.matches && root.dataset.motion !== 'off';
+  const halo = document.createElement('div');
+  halo.className = 'cursor-halo';
+  halo.setAttribute('aria-hidden', 'true');
+  document.body.append(halo);
+  let cursorFrame = 0;
+  function hideHalo() {
+    cancelAnimationFrame(cursorFrame);
+    cursorFrame = 0;
+    halo.dataset.active = 'false';
+  }
+  document.addEventListener('pointermove', event => {
+    if (!allowed() || !finePointer.matches || event.pointerType === 'touch') return;
+    cancelAnimationFrame(cursorFrame);
+    cursorFrame = requestAnimationFrame(() => {
+      cursorFrame = 0;
+      if (!allowed() || !finePointer.matches) return;
+      halo.style.transform = `translate3d(${event.clientX}px,${event.clientY}px,0)`;
+      halo.dataset.active = 'true';
+      halo.dataset.interactive = String(Boolean(event.target.closest('a, button')));
+    });
+  }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', hideHalo);
+  window.addEventListener('blur', hideHalo);
   const clearCard = card => {
     ['--spot-x', '--spot-y', '--tilt-x', '--tilt-y'].forEach(key => card.style.removeProperty(key));
   };
@@ -52,11 +75,12 @@
   }
 
   function synchronize() {
+    if (!allowed() || !finePointer.matches) hideHalo();
     if (allowed()) return;
     cards.forEach(clearCard);
     activeAnimations.forEach(animation => animation.cancel());
   }
   reduced.addEventListener('change', synchronize);
-  finePointer.addEventListener('change', () => cards.forEach(clearCard));
+  finePointer.addEventListener('change', () => { cards.forEach(clearCard); synchronize(); });
   new MutationObserver(synchronize).observe(root, { attributes: true, attributeFilter: ['data-motion'] });
 })();

@@ -33,3 +33,9 @@ nav a{position:relative}nav a::after{content:"";position:absolute;bottom:7px;lef
 :root[data-motion=off] .trajectory{stroke-dashoffset:0}
 @media(prefers-reduced-motion:reduce){.project-card,.project-preview img{transform:none!important}.project-card::after{opacity:0!important}}
 @media(prefers-reduced-motion:reduce){*::before,*::after{animation:none!important;transition:none!important}.trajectory{stroke-dashoffset:0}}
+/* A soft companion to the native pointer, never a replacement for it. */
+.cursor-halo{position:fixed;left:0;top:0;width:0;height:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .2s}
+.cursor-halo::before{content:"";position:absolute;width:34px;height:34px;left:-17px;top:-17px;border:1px solid color-mix(in srgb,var(--accent) 24%,transparent);border-radius:50%;background:radial-gradient(circle,var(--wash),transparent 75%);box-shadow:0 0 22px var(--wash);transition:scale .25s,border-color .25s}
+@media(hover:hover) and (pointer:fine){.cursor-halo[data-active=true]{opacity:1}.cursor-halo[data-interactive=true]::before{scale:1.5;border-color:color-mix(in srgb,var(--accent) 45%,transparent)}}
+:root[data-motion=off] .cursor-halo{display:none}
+@media(prefers-reduced-motion:reduce){.cursor-halo{display:none}}

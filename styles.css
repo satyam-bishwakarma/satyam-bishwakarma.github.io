@@ -42,3 +42,24 @@
 .about{grid-template-columns:.65fr 1.6fr;gap:48px}.about h2{font-size:1.75rem}
 @media(max-width:1100px){.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.project-grid{grid-template-columns:1fr}.about{grid-template-columns:1fr;gap:12px}.project-navigation a{font-size:.8125rem}}
+.work-region{position:relative}
+.project-figure img{height:auto;aspect-ratio:16/10;padding:14px}
+.work-region>.project-navigation{margin-bottom:24px}
+@media(min-width:1101px){.work-region>.project-navigation{margin-bottom:16px}.project-preview img{aspect-ratio:2.3}}
+.selected{scroll-margin-top:calc(var(--project-nav-height,80px) + 24px)}
+.case-studies{padding-top:36px}
+.about{display:block;padding-block:64px}
+.about .section-heading{padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.about .section-heading h2{font-size:1.75rem}
+.about-intro{display:grid;grid-template-columns:1.4fr 1fr;gap:64px}
+.about p{font-size:1rem;line-height:1.6;color:var(--muted);max-width:70ch}
+.about .about-lead{font-size:1.5rem;line-height:1.4;letter-spacing:-.02em;color:var(--ink)}
+.about h3{font-size:1rem;margin:0 0 12px}
+.education-summary{padding-left:28px;border-left:1px solid var(--line)}
+.education-summary h3:not(:first-child){margin-top:24px}
+.education-summary strong{color:var(--ink);font-weight:500}
+.about-foundations{display:grid;grid-template-columns:1fr 1fr;gap:64px;padding-block:28px;margin-top:16px;border-top:1px solid var(--line)}
+.toolkit-section{padding-top:24px;border-top:1px solid var(--line)}
+.toolkit-section .toolkit{grid-template-columns:repeat(3,minmax(0,1fr));border:0;padding-top:8px;gap:24px 40px;margin-bottom:0}
+@media(max-width:760px){.about{padding-block:40px}.about-intro,.about-foundations{grid-template-columns:1fr;gap:20px}.education-summary{padding:20px 0 0;border-left:0;border-top:1px solid var(--line)}.toolkit-section .toolkit{grid-template-columns:1fr 1fr;gap:24px}.about .about-lead{font-size:1.25rem}}
+@media(max-width:420px){.toolkit-section .toolkit{grid-template-columns:1fr}}

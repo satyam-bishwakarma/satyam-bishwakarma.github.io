@@ -12,17 +12,21 @@
     return link;
   });
   const sections = projects.map(project => document.getElementById(project.id));
-  const details = document.querySelector('.case-studies');
+  const region = document.getElementById('work-region');
+  const overview = document.getElementById('work');
+  const overviewLink = container.querySelector('a[href="#work"]');
   let scheduled = false;
   function updateCurrent() {
     scheduled = false;
-    const bounds = details.getBoundingClientRect();
-    const withinDetails = bounds.top <= 32 && bounds.bottom > innerHeight * 0.5;
-    container.dataset.visible = String(withinDetails);
+    const bounds = region.getBoundingClientRect();
+    const withinWork = bounds.bottom > innerHeight * 0.5;
+    container.dataset.visible = String(withinWork);
     const offset = container.getBoundingClientRect().height + 50;
-    const current = sections.findLast(section => section.getBoundingClientRect().top <= offset) || sections[0];
+    const current = sections.findLast(section => section.getBoundingClientRect().top <= offset);
+    if (withinWork && !current) overviewLink.setAttribute('aria-current', 'location');
+    else overviewLink.removeAttribute('aria-current');
     links.forEach((link, index) => {
-      if (withinDetails && sections[index] === current) link.setAttribute('aria-current', 'location');
+      if (withinWork && sections[index] === current) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
   }
@@ -42,7 +46,7 @@
   document.addEventListener('click', event => {
     const link = event.target.closest('a[href^="#"]');
     if (!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    const destination = sections.find(section => `#${section.id}` === link.getAttribute('href'));
+    const destination = [overview, ...sections].find(section => `#${section.id}` === link.getAttribute('href'));
     if (destination) destination.focus({ preventScroll: true });
   });
   updateCurrent();

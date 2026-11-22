@@ -19,3 +19,5 @@ Motion refinement preserves the existing layout. Pointer spotlights and slight c
 This is a static site: no server data, authentication, forms, or loading dependency is required. Browser storage failure must leave controls usable for the current visit.
 
 Organization revision: all four projects share an equal card hierarchy; the hero names Satyam and describes his work directly. Project navigation only appears inside detail browsing; Overview and About clear current-project selection.
+
+Latest structure: navigator precedes Overview cards and spans the whole work region; Overview has its own active state. About uses full-width grouped rows. Pointer halo preserves the native cursor and is disabled for touch, pause and reduced motion.

@@ -140,8 +140,11 @@ try {
       await page.waitForFunction(() => document.querySelector('.project-card').style.getPropertyValue('--spot-x') !== '', null, { timeout: 3000 });
       const spot = await card.evaluate(node => node.style.getPropertyValue('--spot-x'));
       assert.ok(spot.endsWith('px'));
+      assert.equal(await page.locator('.cursor-halo').getAttribute('data-active'), 'true');
       await page.locator('#motion').click();
       assert.equal(await card.evaluate(node => node.style.getPropertyValue('--spot-x')), '');
+      assert.equal(await page.locator('.cursor-halo').evaluate(node => getComputedStyle(node).display), 'none');
+      assert.equal(await page.locator('.cursor-halo').getAttribute('data-active'), 'false');
       assert.equal(await page.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').length), 0);
       assert.equal(await page.locator('h1').isVisible(), true);
     } finally { await context.close(); }
@@ -163,8 +166,11 @@ try {
       assert.equal(await page.locator('#drm-yolo').isVisible(), true);
       await page.screenshot({ path: `${artifacts}navigator-mobile.png` });
       await navigator.getByRole('link', { name: 'Overview', exact: true }).click();
-      await page.waitForFunction(() => document.querySelector('#project-navigation').dataset.visible === 'false');
-      assert.equal(await navigator.isVisible(), false, 'Detail navigator must leave the overview');
+      await page.waitForFunction(() => document.querySelector('#project-navigation a[href="#work"]').getAttribute('aria-current') === 'location');
+      assert.equal(await navigator.isVisible(), true, 'Navigator begins above the overview grid');
+      const navBox = await navigator.boundingBox();
+      const gridBox = await page.locator('#project-grid').boundingBox();
+      assert.ok(gridBox.y > navBox.y + navBox.height, 'Overview grid belongs below the navigator');
       assert.equal(await page.locator('.project-card').count(), 4, 'All projects share the overview grid');
       await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
       await page.waitForFunction(() => location.hash === '#about');
