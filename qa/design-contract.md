@@ -21,3 +21,5 @@ This is a static site: no server data, authentication, forms, or loading depende
 Organization revision: all four projects share an equal card hierarchy; the hero names Satyam and describes his work directly. Project navigation only appears inside detail browsing; Overview and About clear current-project selection.
 
 Latest structure: navigator precedes Overview cards and spans the whole work region; Overview has its own active state. About uses full-width grouped rows. Pointer halo preserves the native cursor and is disabled for touch, pause and reduced motion.
+
+Hierarchy refinement: sticky global header; subordinate flat project index with underline selection. Compact mobile labels avoid clipped choices at target viewport. About uses equal grid tracks and shared spacing for headings/body. Keyboard skip-link must render above the header; global Work/About active states follow their anchors.

@@ -70,7 +70,7 @@ try {
         await page.screenshot({ path: `${artifacts}${viewport.width}x${viewport.height}-viewport.png` });
         await page.screenshot({ path: `${artifacts}${viewport.width}x${viewport.height}.png`, fullPage: true });
         await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
-        await page.waitForFunction(() => document.querySelector('#about').getBoundingClientRect().top < 40);
+        await page.waitForFunction(() => document.querySelector('#about').getBoundingClientRect().top <= document.querySelector('.site-header').getBoundingClientRect().height + 28);
         assert.equal(await page.locator('#project-navigation').isVisible(), false, 'Detail navigation must be absent at About');
         await page.screenshot({ path: `${artifacts}about-${viewport.width}.png` });
       } finally { await context.close(); }
@@ -123,6 +123,10 @@ try {
       assert.equal(await page.locator(':focus').textContent(), 'Skip to content');
       const outline = await page.locator(':focus').evaluate(node => getComputedStyle(node).outlineStyle);
       assert.notEqual(outline, 'none', 'Keyboard focus must be visible');
+      assert.ok(await page.locator(':focus').evaluate(node => {
+        const box = node.getBoundingClientRect();
+        return node.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2));
+      }), 'Skip link must appear above the sticky header');
       await page.getByRole('button', { name: /theme/i }).click();
       assert.ok(await page.locator('html').getAttribute('data-theme'));
       await page.getByRole('button', { name: /motion/i }).click();
@@ -161,13 +165,15 @@ try {
       await page.waitForFunction(() => location.hash === '#image-infrastructure');
       await page.waitForFunction(() => document.querySelector('#project-navigation a[aria-current]')?.getAttribute('href') === '#image-infrastructure');
       const bounds = await navigator.boundingBox();
-      assert.ok(bounds.y >= 0 && bounds.y < 30, 'Navigator stays at viewport top');
+      const headerBox = await page.locator('.site-header').boundingBox();
+      assert.ok(Math.abs(bounds.y - headerBox.height) < 2, 'Project index sits directly below the global header');
       await navigator.getByRole('link', { name: 'Read DRM-YOLO object detection' }).click();
       assert.equal(await page.locator('#drm-yolo').isVisible(), true);
       await page.screenshot({ path: `${artifacts}navigator-mobile.png` });
       await navigator.getByRole('link', { name: 'Overview', exact: true }).click();
       await page.waitForFunction(() => document.querySelector('#project-navigation a[href="#work"]').getAttribute('aria-current') === 'location');
       assert.equal(await navigator.isVisible(), true, 'Navigator begins above the overview grid');
+      assert.equal(await page.getByRole('navigation', {name:'Main navigation',exact:true}).getByRole('link',{name:'Work',exact:true}).getAttribute('aria-current'), 'location');
       const navBox = await navigator.boundingBox();
       const gridBox = await page.locator('#project-grid').boundingBox();
       assert.ok(gridBox.y > navBox.y + navBox.height, 'Overview grid belongs below the navigator');
@@ -175,6 +181,7 @@ try {
       await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
       await page.waitForFunction(() => location.hash === '#about');
       assert.equal(await navigator.isVisible(), false, 'Project navigation must not appear in About');
+      assert.equal(await page.getByRole('navigation', {name:'Main navigation',exact:true}).getByRole('link',{name:'About',exact:true}).getAttribute('aria-current'), 'location');
       assert.equal(await navigator.locator('[aria-current]').count(), 0, 'About must not carry a stale project selection');
     } finally { await context.close(); }
   });

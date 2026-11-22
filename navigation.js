@@ -2,11 +2,18 @@
   'use strict';
   const container = document.getElementById('project-navigation');
   const labels = ['Compositional vision', 'Cloud infrastructure', 'DRM-YOLO', 'Water quality'];
+  const compactLabels = ['Vision', 'Cloud', 'DRM-YOLO', 'Water'];
   const projects = window.PORTFOLIO.projects;
   const links = projects.map((project, index) => {
     const link = document.createElement('a');
     link.href = `#${project.id}`;
-    link.textContent = labels[index] || project.heading;
+    const fullLabel = document.createElement('span');
+    fullLabel.className = 'project-label-full';
+    fullLabel.textContent = labels[index] || project.heading;
+    const compactLabel = document.createElement('span');
+    compactLabel.className = 'project-label-compact';
+    compactLabel.textContent = compactLabels[index] || project.heading;
+    link.append(fullLabel, compactLabel);
     link.setAttribute('aria-label', `Read ${project.heading}`);
     container.append(link);
     return link;
@@ -15,18 +22,26 @@
   const region = document.getElementById('work-region');
   const overview = document.getElementById('work');
   const overviewLink = container.querySelector('a[href="#work"]');
+  const mainLinks = [...document.querySelectorAll('.site-header nav a')];
+  const mainSections = mainLinks.map(link => link.getAttribute('href') === '#work' ? region : document.querySelector(link.getAttribute('href')));
   let scheduled = false;
   function updateCurrent() {
     scheduled = false;
     const bounds = region.getBoundingClientRect();
-    const withinWork = bounds.bottom > innerHeight * 0.5;
+    const headerHeight = document.querySelector('.site-header').getBoundingClientRect().height;
+    const withinWork = bounds.bottom > headerHeight + container.getBoundingClientRect().height;
     container.dataset.visible = String(withinWork);
-    const offset = container.getBoundingClientRect().height + 50;
+    const offset = headerHeight + container.getBoundingClientRect().height + 50;
     const current = sections.findLast(section => section.getBoundingClientRect().top <= offset);
     if (withinWork && !current) overviewLink.setAttribute('aria-current', 'location');
     else overviewLink.removeAttribute('aria-current');
     links.forEach((link, index) => {
       if (withinWork && sections[index] === current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    const mainCurrent = mainSections.findLast(section => section.getBoundingClientRect().top <= headerHeight + 40);
+    mainLinks.forEach((link, index) => {
+      if (mainSections[index] === mainCurrent) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
   }
@@ -42,6 +57,7 @@
     scheduleUpdate();
   });
   resizeObserver.observe(container);
+  resizeObserver.observe(document.querySelector('.site-header'));
   // Native anchors preserve deep links and browser history. Focus follows the destination.
   document.addEventListener('click', event => {
     const link = event.target.closest('a[href^="#"]');
