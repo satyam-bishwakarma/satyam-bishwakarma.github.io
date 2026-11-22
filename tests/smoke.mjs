@@ -69,6 +69,10 @@ try {
         await page.goto(baseURL, { waitUntil: 'networkidle' });
         await page.screenshot({ path: `${artifacts}${viewport.width}x${viewport.height}-viewport.png` });
         await page.screenshot({ path: `${artifacts}${viewport.width}x${viewport.height}.png`, fullPage: true });
+        await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
+        await page.waitForFunction(() => document.querySelector('#about').getBoundingClientRect().top < 40);
+        assert.equal(await page.locator('#project-navigation').isVisible(), false, 'Detail navigation must be absent at About');
+        await page.screenshot({ path: `${artifacts}about-${viewport.width}.png` });
       } finally { await context.close(); }
     });
   }
@@ -158,6 +162,14 @@ try {
       await navigator.getByRole('link', { name: 'Read DRM-YOLO object detection' }).click();
       assert.equal(await page.locator('#drm-yolo').isVisible(), true);
       await page.screenshot({ path: `${artifacts}navigator-mobile.png` });
+      await navigator.getByRole('link', { name: 'Overview', exact: true }).click();
+      await page.waitForFunction(() => document.querySelector('#project-navigation').dataset.visible === 'false');
+      assert.equal(await navigator.isVisible(), false, 'Detail navigator must leave the overview');
+      assert.equal(await page.locator('.project-card').count(), 4, 'All projects share the overview grid');
+      await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
+      await page.waitForFunction(() => location.hash === '#about');
+      assert.equal(await navigator.isVisible(), false, 'Project navigation must not appear in About');
+      assert.equal(await navigator.locator('[aria-current]').count(), 0, 'About must not carry a stale project selection');
     } finally { await context.close(); }
   });
 

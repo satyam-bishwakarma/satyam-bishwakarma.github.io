@@ -12,13 +12,17 @@
     return link;
   });
   const sections = projects.map(project => document.getElementById(project.id));
+  const details = document.querySelector('.case-studies');
   let scheduled = false;
   function updateCurrent() {
     scheduled = false;
-    const offset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) + parseFloat(getComputedStyle(sections[0]).scrollMarginTop) + 2;
+    const bounds = details.getBoundingClientRect();
+    const withinDetails = bounds.top <= 32 && bounds.bottom > innerHeight * 0.5;
+    container.dataset.visible = String(withinDetails);
+    const offset = container.getBoundingClientRect().height + 50;
     const current = sections.findLast(section => section.getBoundingClientRect().top <= offset) || sections[0];
     links.forEach((link, index) => {
-      if (sections[index] === current) link.setAttribute('aria-current', 'location');
+      if (withinDetails && sections[index] === current) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
   }
@@ -29,6 +33,11 @@
   }
   window.addEventListener('scroll', scheduleUpdate, { passive: true });
   window.addEventListener('resize', scheduleUpdate, { passive: true });
+  const resizeObserver = new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--project-nav-height', `${container.getBoundingClientRect().height}px`);
+    scheduleUpdate();
+  });
+  resizeObserver.observe(container);
   // Native anchors preserve deep links and browser history. Focus follows the destination.
   document.addEventListener('click', event => {
     const link = event.target.closest('a[href^="#"]');

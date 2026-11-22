@@ -40,8 +40,8 @@
   data.projects.forEach(project => {
     const card = element('a', 'project-card'); card.href = `#${project.id}`;
     const preview = element('div', 'project-preview'); preview.append(projectImage(project), element('span', 'preview-caption', 'Illustrative preview'));
-    const copy = element('div', 'card-copy'); copy.append(element('p', 'category', project.category), element('h3', '', project.title), element('p', '', project.short), element('span', 'read-case', 'Read the project'));
-    card.append(preview, copy); if (project.id !== 'drm-yolo') document.getElementById('project-grid').append(card);
+    const copy = element('div', 'card-copy'); copy.append(element('p', 'category', project.category), element('h3', '', project.heading), element('p', '', project.short), element('span', 'read-case', 'Read the project'));
+    card.append(preview, copy); document.getElementById('project-grid').append(card);
     const section = element('article', 'case-study'); section.id = project.id; section.tabIndex = -1;
     const description = element('div'); description.append(element('p', 'category', project.status), element('h3', '', project.heading), element('p', '', project.description));
     [['My contribution', project.contribution], ['Evidence & limitations', project.evidence]].forEach(([label, text]) => { const p = element('p'); p.append(element('span', 'detail-label', label), document.createTextNode(text)); description.append(p); });

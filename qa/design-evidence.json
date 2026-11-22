@@ -10,7 +10,7 @@
   },
   "responsive": {
     "status": "pass",
-    "evidence": "Playwright found no horizontal overflow at 1440x900 and 390x844. Rendered screenshots inspected: full introduction and three project summaries fit desktop first screen; mobile stacks readable content and controls; diagrams remain uncropped. Refined effects preserve the existing layout and first-viewport card fit; updated desktop and mobile screenshots inspected."
+    "evidence": "Playwright found no horizontal overflow at 1440x900 and 390x844. Rendered screenshots inspected: full introduction and three project summaries fit desktop first screen; mobile stacks readable content and controls; diagrams remain uncropped. Refined effects preserve the existing layout and first-viewport card fit; updated desktop and mobile screenshots inspected. Organization revision: inspected four equal project cards and factual name-first hero; desktop About capture confirms project navigation absent."
   },
   "contentStates": {
     "loading": {
@@ -42,7 +42,7 @@
     {
       "viewport": "1440x900",
       "artifact": "1440x900-viewport.png",
-      "observation": "Inspected desktop overview; identity, academic context, social/CV states and three complete project preview cards visible."
+      "observation": "Inspected desktop overview; identity, academic context, social/CV states and four complete project preview cards visible."
     },
     {
       "viewport": "390x844",
@@ -58,6 +58,11 @@
       "viewport": "390x844",
       "artifact": "navigator-mobile.png",
       "observation": "Inspected sticky wrapping navigator with active DRM-YOLO link and visible project heading after direct navigation."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "about-1440.png",
+      "observation": "Inspected About: plain heading, profile and toolkit; project navigator absent, no stale project highlight."
     }
   ]
 }

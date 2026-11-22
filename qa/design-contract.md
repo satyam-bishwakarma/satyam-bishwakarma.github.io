@@ -3,7 +3,7 @@
 Audience: research collaborators, internship reviewers, and engineering hiring teams.
 Primary job: understand Satyam's focus and inspect evidence within a short visit.
 
-- At 1440×900, show identity, academic context, research/engineering focus, social/CV access and selected project previews.
+- At 1440×900, show identity, academic context, research/engineering focus, social/CV access and all four selected project previews.
 - At 390×844, prioritize identity and access, then stack project previews without horizontal scrolling.
 - Each project preview links to its own detailed section, with a description and representative visual side by side on desktop and stacked on mobile.
 - Porcelain/carbon foundations with ultramarine accents: approximate 60/30/10 visual balance, inverted for dark mode.
@@ -17,3 +17,5 @@ References inspected: user's local project-grid screenshot and Lumora template p
 Motion refinement preserves the existing layout. Pointer spotlights and slight card depth apply only with a fine pointer and hover support. Entrance transitions run once, start from visible content and cannot gate reading. Gradients, contour movement, path tracing and UI transitions stop under manual pause or OS reduced motion. No shader runtime, external library or scroll hijacking is added.
 
 This is a static site: no server data, authentication, forms, or loading dependency is required. Browser storage failure must leave controls usable for the current visit.
+
+Organization revision: all four projects share an equal card hierarchy; the hero names Satyam and describes his work directly. Project navigation only appears inside detail browsing; Overview and About clear current-project selection.
