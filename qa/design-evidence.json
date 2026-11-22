@@ -1,19 +1,58 @@
 {
   "contract": "qa/design-contract.md: concise first screen, anchored project details, restrained motion, themes, honest placeholders and manual publishing.",
-  "targetViewports": ["1440x900", "390x844"],
-  "accessibility": {"status": "pass", "evidence": "Playwright verified keyboard skip-link focus and visible focus outline, functional labelled controls, OS reduced-motion suppression, working controls with unavailable local storage, and no dead placeholder links. Source and rendered review checked legible body text, theme contrast and representative-image labels. This is a focused review, not a full WCAG certification."},
-  "responsive": {"status": "pass", "evidence": "Playwright found no horizontal overflow at 1440x900 and 390x844. Rendered screenshots inspected: full introduction and three project summaries fit desktop first screen; mobile stacks readable content and controls; diagrams remain uncropped."},
+  "targetViewports": [
+    "1440x900",
+    "390x844"
+  ],
+  "accessibility": {
+    "status": "pass",
+    "evidence": "Playwright verified keyboard skip-link focus and visible focus outline, functional labelled controls, OS reduced-motion suppression, working controls with unavailable local storage, and no dead placeholder links. Source and rendered review checked legible body text, theme contrast and representative-image labels. This is a focused review, not a full WCAG certification. Second pass: pointer spotlight response tested; manual pause clears card variables and stops all running animations. Seven browser checks pass."
+  },
+  "responsive": {
+    "status": "pass",
+    "evidence": "Playwright found no horizontal overflow at 1440x900 and 390x844. Rendered screenshots inspected: full introduction and three project summaries fit desktop first screen; mobile stacks readable content and controls; diagrams remain uncropped. Refined effects preserve the existing layout and first-viewport card fit; updated desktop and mobile screenshots inspected."
+  },
   "contentStates": {
-    "loading": {"status": "not-applicable", "reason": "Static local assets and scripts; no data fetch or application loading flow."},
-    "empty": {"status": "pass", "evidence": "Missing X, LinkedIn and CV destinations render visibly labelled soon placeholders without live links."},
-    "error": {"status": "pass", "evidence": "Browser storage exceptions tested; theme and motion controls still work for the current visit with no uncaught errors."},
-    "partial": {"status": "pass", "evidence": "GitHub remains usable alongside unavailable social and CV destinations; illustrations explicitly labelled as representative."},
-    "success": {"status": "pass", "evidence": "Theme and motion preferences survive reload; project links resolve to detailed sections; project assets decode successfully."},
-    "permission": {"status": "not-applicable", "reason": "Public static portfolio has no authentication or permission-gated visitor workflow."}
+    "loading": {
+      "status": "not-applicable",
+      "reason": "Static local assets and scripts; no data fetch or application loading flow."
+    },
+    "empty": {
+      "status": "pass",
+      "evidence": "Missing X, LinkedIn and CV destinations render visibly labelled soon placeholders without live links."
+    },
+    "error": {
+      "status": "pass",
+      "evidence": "Browser storage exceptions tested; theme and motion controls still work for the current visit with no uncaught errors."
+    },
+    "partial": {
+      "status": "pass",
+      "evidence": "GitHub remains usable alongside unavailable social and CV destinations; illustrations explicitly labelled as representative."
+    },
+    "success": {
+      "status": "pass",
+      "evidence": "Theme and motion preferences survive reload; project links resolve to detailed sections; project assets decode successfully."
+    },
+    "permission": {
+      "status": "not-applicable",
+      "reason": "Public static portfolio has no authentication or permission-gated visitor workflow."
+    }
   },
   "renderedEvidence": [
-    {"viewport": "1440x900", "artifact": "1440x900-viewport.png", "observation": "Inspected desktop overview; identity, academic context, social/CV states and three complete project preview cards visible."},
-    {"viewport": "390x844", "artifact": "390x844-viewport.png", "observation": "Inspected mobile introduction, wrapping social controls and beginning of stacked project grid; no horizontal scrolling."},
-    {"viewport": "1440x900", "artifact": "alternate-theme.png", "observation": "Inspected dark-theme full-page capture with two-column project sections and representative visuals."}
+    {
+      "viewport": "1440x900",
+      "artifact": "1440x900-viewport.png",
+      "observation": "Inspected desktop overview; identity, academic context, social/CV states and three complete project preview cards visible."
+    },
+    {
+      "viewport": "390x844",
+      "artifact": "390x844-viewport.png",
+      "observation": "Inspected mobile introduction, wrapping social controls and beginning of stacked project grid; no horizontal scrolling."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "alternate-theme.png",
+      "observation": "Inspected dark-theme full-page capture with two-column project sections and representative visuals."
+    }
   ]
 }

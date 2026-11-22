@@ -24,7 +24,9 @@ GitHub automatically enabled legacy branch publishing when the user-site reposit
 
 ## Design references
 
-The project-card screenshot supplied by the user informed the preview grid; the local Lumora prompt informed spacing and section rhythm. [React Bits](https://reactbits.dev) and [ReactDrops](https://reactdrops.dev) informed restrained background motion rather than copied components. [Apple typography guidance](https://developer.apple.com/design/human-interface-guidelines/typography) informed the native system font, hierarchy, clear grouping, and generous space. The requested better-typography reference could not be retrieved; readable line lengths and spacing were applied directly.
+The project-card screenshot supplied by the user informed the preview grid; the local Lumora prompt informed spacing and section rhythm. Second-pass live browser review covered React Bits' [Spotlight Card](https://reactbits.dev/components/spotlight-card), [Aurora](https://reactbits.dev/backgrounds/aurora), and the [ReactDrops](https://reactdrops.dev) homepage. Original effects in `effects.css` and `motion.js` adapt those ideas: pointer-following card illumination, slight depth, an ambient ultramarine wash, contour movement, path tracing, and one-time entrance transitions. No library code or third-party assets were copied.
+
+[Apple typography guidance](https://developer.apple.com/design/human-interface-guidelines/typography) informed hierarchy and the native system font. A likely match for the originally ambiguous better-typography reference is [Jakub Krehel's skill](https://github.com/jakubkrehel/skills/blob/main/skills/better-typography/SKILL.md), reviewed on the second pass. Its guidance informed balanced headings, paragraph wrapping, rem-based text roles, and readable line measures.
 
 Motion respects the operating system's reduced-motion preference even when the manual motion setting is enabled. Theme and manual motion choices persist locally when browser storage is available. Project links and social content are created using DOM text nodes; external links accept only HTTP(S).
 

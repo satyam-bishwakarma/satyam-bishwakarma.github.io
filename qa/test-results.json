@@ -22,6 +22,10 @@
       "status": "pass"
     },
     {
+      "name": "card lighting responds to pointer and motion pause clears effects",
+      "status": "pass"
+    },
+    {
       "name": "unfinished social and CV destinations are not misleading links",
       "status": "pass"
     }

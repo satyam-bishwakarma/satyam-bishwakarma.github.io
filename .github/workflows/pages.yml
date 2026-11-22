@@ -39,7 +39,7 @@ jobs:
         run: |
           mkdir _site
           if [ "$SITE_MODE" = "portfolio" ]; then
-            cp index.html styles.css app.js content.js _site/
+            cp index.html styles.css effects.css app.js content.js motion.js _site/
             cp -R assets _site/assets
           else
             cp maintenance/index.html _site/index.html

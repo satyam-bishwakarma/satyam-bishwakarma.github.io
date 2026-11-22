@@ -127,6 +127,22 @@ try {
     } finally { await context.close(); }
   });
 
+  await check('card lighting responds to pointer and motion pause clears effects', async () => {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    try {
+      const { page } = await visit(context);
+      const card = page.locator('.project-card').first();
+      await card.hover({ position: { x: 80, y: 80 } });
+      await page.waitForFunction(() => document.querySelector('.project-card').style.getPropertyValue('--spot-x') !== '', null, { timeout: 3000 });
+      const spot = await card.evaluate(node => node.style.getPropertyValue('--spot-x'));
+      assert.ok(spot.endsWith('px'));
+      await page.locator('#motion').click();
+      assert.equal(await card.evaluate(node => node.style.getPropertyValue('--spot-x')), '');
+      assert.equal(await page.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').length), 0);
+      assert.equal(await page.locator('h1').isVisible(), true);
+    } finally { await context.close(); }
+  });
+
   await check('unfinished social and CV destinations are not misleading links', async () => {
     const context = await browser.newContext();
     try {
