@@ -23,7 +23,7 @@
     cursorFrame = requestAnimationFrame(() => {
       cursorFrame = 0;
       if (!allowed() || !finePointer.matches) return;
-      halo.style.transform = `translate3d(${event.clientX}px,${event.clientY}px,0)`;
+      halo.style.transform = `translate3d(${event.clientX + 38}px,${event.clientY + 30}px,0)`;
       halo.dataset.active = 'true';
       halo.dataset.interactive = String(Boolean(event.target.closest('a, button')));
     });
@@ -60,18 +60,22 @@
   // Content stays visible if observers, animations or this script are unavailable.
   if ('IntersectionObserver' in window && Element.prototype.animate) {
     const observer = new IntersectionObserver(entries => {
-      entries.filter(entry => entry.isIntersecting).forEach((entry, index) => {
+      entries.filter(entry => entry.isIntersecting).forEach(entry => {
         observer.unobserve(entry.target);
         if (!allowed()) return;
+        if (entry.target.closest('.case-study:target')) return;
+        const isFigure = entry.target.matches('.project-figure, .research-visual');
+        const siblings = [...entry.target.parentElement.children];
+        const order = Math.max(0, siblings.indexOf(entry.target));
         const animation = entry.target.animate([
-          { opacity: 0.65, translate: '0 12px' },
-          { opacity: 1, translate: '0 0' }
-        ], { duration: 580, delay: Math.min(index * 55, 165), easing: 'cubic-bezier(.22,1,.36,1)' });
+          { opacity: isFigure ? 0.65 : 0.82, translate: `0 ${isFigure ? 20 : 14}px`, scale: isFigure ? '0.985' : '1', filter: isFigure ? 'blur(2px)' : 'blur(0px)' },
+          { opacity: 1, translate: '0 0', scale: '1', filter: 'blur(0px)' }
+        ], { duration: isFigure ? 700 : 560, delay: Math.min(order * 65, 130), easing: 'cubic-bezier(.22,1,.36,1)' });
         activeAnimations.add(animation);
         animation.onfinish = animation.oncancel = () => activeAnimations.delete(animation);
       });
     }, { threshold: 0.08 });
-    document.querySelectorAll('.intro-copy, .research-visual, .project-card, .case-study, .about, .connect').forEach(node => observer.observe(node));
+    document.querySelectorAll('.intro-copy, .research-visual, .project-card, .case-study>div, .project-figure, .about-intro>div, .about-foundations>div, .toolkit>div, .connect').forEach(node => observer.observe(node));
   }
 
   function synchronize() {

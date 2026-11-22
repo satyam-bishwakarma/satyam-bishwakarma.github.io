@@ -45,3 +45,7 @@ About uses full-width content bands: profile and education, foundations and inte
 ## Navigation hierarchy and spacing
 
 The global header remains available for Work, About and Connect, with its current section indicated. The project index is subordinate: one flat row with an underline, directly beneath the header while browsing work. Compact mobile labels keep all project choices readable; full accessible names remain available. Anchor offsets account for both rows. About uses a shared two-column grid for profile, credentials and foundations, followed by a three-column toolkit. Group spacing follows 8/16/24/32/48/64px steps; these are project design choices, informed by [Apple layout guidance](https://developer.apple.com/design/human-interface-guidelines/layout), not Apple-mandated web measurements.
+
+## Supplied component adaptations
+
+Reviewed the supplied React Bits PillNav and AnimatedContent sources. The portfolio remains plain HTML/CSS/JS: global navigation adapts the rising fill, rolling label and sliding active dot; section content uses short, staggered native Web Animations. These are behavior adaptations rather than imported React components. Text moves 14px without blur; figures move 20px with a 2px blur and subtle scale, once only. Deep-linked project targets are shown immediately. No scrub, disappearance or scroll blocking is used. Reveals remain visible if scripting fails and cancel under manual pause or reduced motion. The cursor effect is an offset, diffuse elliptical glow with no outlined circle at the pointer tip.

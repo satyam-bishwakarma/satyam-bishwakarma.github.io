@@ -145,6 +145,7 @@ try {
       const spot = await card.evaluate(node => node.style.getPropertyValue('--spot-x'));
       assert.ok(spot.endsWith('px'));
       assert.equal(await page.locator('.cursor-halo').getAttribute('data-active'), 'true');
+      assert.equal(await page.locator('.cursor-halo').evaluate(node => getComputedStyle(node, '::before').borderTopWidth), '0px', 'Cursor light must have no outlined ring');
       await page.locator('#motion').click();
       assert.equal(await card.evaluate(node => node.style.getPropertyValue('--spot-x')), '');
       assert.equal(await page.locator('.cursor-halo').evaluate(node => getComputedStyle(node).display), 'none');
@@ -165,6 +166,8 @@ try {
       await page.waitForFunction(() => location.hash === '#image-infrastructure');
       await page.waitForFunction(() => document.querySelector('#project-navigation a[aria-current]')?.getAttribute('href') === '#image-infrastructure');
       const bounds = await navigator.boundingBox();
+      const dot = page.locator('.pill-active-dot');
+      assert.equal(await dot.evaluate(node => getComputedStyle(node).opacity), '1', 'Active global section has a visible indicator');
       const headerBox = await page.locator('.site-header').boundingBox();
       assert.ok(Math.abs(bounds.y - headerBox.height) < 2, 'Project index sits directly below the global header');
       await navigator.getByRole('link', { name: 'Read DRM-YOLO object detection' }).click();

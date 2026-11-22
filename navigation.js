@@ -23,6 +23,24 @@
   const overview = document.getElementById('work');
   const overviewLink = container.querySelector('a[href="#work"]');
   const mainLinks = [...document.querySelectorAll('.site-header nav a')];
+  const mainNav = document.querySelector('.site-header nav');
+  mainNav.classList.add('pill-navigation');
+  mainLinks.forEach(link => {
+    const label = link.textContent;
+    link.setAttribute('aria-label', label);
+    const face = document.createElement('span');
+    face.className = 'pill-label';
+    face.textContent = label;
+    const alternate = document.createElement('span');
+    alternate.className = 'pill-label-alternate';
+    alternate.textContent = label;
+    alternate.setAttribute('aria-hidden', 'true');
+    link.replaceChildren(face, alternate);
+  });
+  const activeDot = document.createElement('span');
+  activeDot.className = 'pill-active-dot';
+  activeDot.setAttribute('aria-hidden', 'true');
+  mainNav.append(activeDot);
   const mainSections = mainLinks.map(link => link.getAttribute('href') === '#work' ? region : document.querySelector(link.getAttribute('href')));
   let scheduled = false;
   function updateCurrent() {
@@ -44,6 +62,9 @@
       if (mainSections[index] === mainCurrent) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
+    const activeLink = mainLinks.find(link => link.hasAttribute('aria-current'));
+    activeDot.style.opacity = activeLink ? '1' : '0';
+    if (activeLink) activeDot.style.left = `${activeLink.offsetLeft + activeLink.offsetWidth / 2}px`;
   }
   function scheduleUpdate() {
     if (scheduled) return;

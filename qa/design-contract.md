@@ -23,3 +23,5 @@ Organization revision: all four projects share an equal card hierarchy; the hero
 Latest structure: navigator precedes Overview cards and spans the whole work region; Overview has its own active state. About uses full-width grouped rows. Pointer halo preserves the native cursor and is disabled for touch, pause and reduced motion.
 
 Hierarchy refinement: sticky global header; subordinate flat project index with underline selection. Compact mobile labels avoid clipped choices at target viewport. About uses equal grid tracks and shared spacing for headings/body. Keyboard skip-link must render above the header; global Work/About active states follow their anchors.
+
+Supplied-effects adaptation: PillNav-inspired behavior applies to the global navigation only. AnimatedContent-inspired short staggered entrances use visible fallbacks, never disappearance or scrub; figures alone use blur. Pointer light is offset and unoutlined.
