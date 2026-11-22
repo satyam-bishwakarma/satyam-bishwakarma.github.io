@@ -14,11 +14,13 @@ From this directory run `python3 -m http.server 4173` and visit http://localhost
 - Remove the `noindex, nofollow` robots meta tag in `index.html` when the portfolio is ready to appear in search results.
 - Colors and responsive layout live in `styles.css`. Porcelain is the primary light surface, carbon supplies structure and typography, and ultramarine is reserved for emphasis. Dark mode reverses the surface and ink roles. These are compositional proportions, not strict pixel counts.
 
-## GitHub Pages (prepared, deployment disabled)
+## GitHub Pages (maintenance mode)
 
-The intended user-site repository is `satyam-bishwakarma/satyam-bishwakarma.github.io`, which serves `https://satyam-bishwakarma.github.io/` once deployed. Source can be public while the site remains unpublished.
+The user-site repository is `satyam-bishwakarma/satyam-bishwakarma.github.io`, serving `https://satyam-bishwakarma.github.io/`. The public site is intended to show only `maintenance/index.html` until content is ready. The full portfolio is available locally and in source.
 
-`.github/workflows/pages.yml` is manual only. Pushing changes does not automatically deploy. When placeholders are complete, configure repository **Settings → Pages → Source → GitHub Actions**, then run the Pages workflow with the required `PUBLISH` confirmation. Check its result and visit the live URL. The workflow publishes the static site; there is no application server.
+`.github/workflows/pages.yml` is manual only. Pages is configured for GitHub Actions; pushing changes does not automatically deploy. When placeholders are complete, run **Actions → Publish portfolio → Run workflow**, choose mode **portfolio**, and enter `PUBLISH`. To return to the preparation screen, run with **maintenance** mode (the default). Check the workflow result and visit the live URL. Only the selected site's files enter the deployment artifact; tests and source documentation are excluded.
+
+GitHub automatically enabled legacy branch publishing when the user-site repository was created and briefly deployed the first push. That build was cancelled, publishing was switched to Actions, and a maintenance deployment replaced the unfinished portfolio. The API refused direct Pages deactivation, so maintenance mode keeps unfinished content out of the current public website while preserving the source.
 
 ## Design references
 
