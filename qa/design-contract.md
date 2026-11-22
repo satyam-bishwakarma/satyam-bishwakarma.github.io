@@ -25,3 +25,5 @@ Latest structure: navigator precedes Overview cards and spans the whole work reg
 Hierarchy refinement: sticky global header; subordinate flat project index with underline selection. Compact mobile labels avoid clipped choices at target viewport. About uses equal grid tracks and shared spacing for headings/body. Keyboard skip-link must render above the header; global Work/About active states follow their anchors.
 
 Supplied-effects adaptation: PillNav-inspired behavior applies to the global navigation only. AnimatedContent-inspired short staggered entrances use visible fallbacks, never disappearance or scrub; figures alone use blur. Pointer light is offset and unoutlined.
+
+Current migration supersedes earlier two-row navigation: React provides one global pill navigation and an accessible project picker. GSAP owns reveal effects, Vite bundles dependencies. Cursor is an arrow with ultramarine edge and shadow; native pointer is restored on pause/reduced motion/touch/editable fields.

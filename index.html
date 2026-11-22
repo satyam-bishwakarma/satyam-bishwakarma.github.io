@@ -7,13 +7,13 @@
   <meta name="theme-color" content="#f6f7fa"><meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="effects.css">
   <script>try{const t=localStorage.getItem('portfolio-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t;const m=localStorage.getItem('portfolio-motion');if(m==='off')document.documentElement.dataset.motion='off'}catch{}</script>
-  <script src="content.js" defer></script><script src="app.js" defer></script><script src="motion.js" defer></script><script src="navigation.js" defer></script>
+  <script src="content.js" defer></script><script src="app.js" defer></script><script src="motion.js" defer></script><script type="module" src="/src/main.jsx"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header"><div class="header-inner shell">
     <a class="wordmark" href="#top" aria-label="Satyam Bishwakarma home">sb<span>.</span></a>
-    <nav aria-label="Main navigation"><a href="#work">Work</a><a href="#about">About</a><a href="#connect">Connect</a></nav>
+    <div id="unified-navigation"></div>
     <div class="preferences"><button id="motion" type="button" aria-pressed="false" title="Pause background motion"><span class="motion-icon" aria-hidden="true">Ⅱ</span><span class="control-label">Motion</span></button><button id="theme" type="button" aria-label="Switch to dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.3A8.7 8.7 0 0 1 10.7 3.4 8.8 8.8 0 1 0 20.6 13.3Z"/></svg></button></div>
   </div></header>
   <main id="main">
@@ -26,7 +26,6 @@
       <div class="research-visual" aria-hidden="true"><div class="visual-label">QUESTION → EXPERIMENT → EVIDENCE</div><svg viewBox="0 0 420 260" fill="none"><g class="contours" stroke="currentColor" stroke-width=".8"><ellipse cx="217" cy="137" rx="176" ry="100" transform="rotate(-24 217 137)"/><ellipse cx="217" cy="137" rx="149" ry="83" transform="rotate(-24 217 137)"/><ellipse cx="217" cy="137" rx="122" ry="66" transform="rotate(-24 217 137)"/><ellipse cx="217" cy="137" rx="95" ry="49" transform="rotate(-24 217 137)"/><ellipse cx="217" cy="137" rx="68" ry="33" transform="rotate(-24 217 137)"/><ellipse cx="217" cy="137" rx="41" ry="18" transform="rotate(-24 217 137)"/></g><path class="trajectory" d="m79 64 224 24-149 122 105-48-53-23 15-9"/><g fill="currentColor"><circle cx="79" cy="64" r="3"/><circle cx="303" cy="88" r="3"/><circle cx="154" cy="210" r="3"/><circle cx="259" cy="162" r="3"/><circle cx="206" cy="139" r="3"/><circle class="destination" cx="221" cy="130" r="5"/></g></svg><div class="visual-foot"><span>Optimization, in perspective.</span><span>Illustrative study</span></div></div>
     </section>
     <div class="work-region" id="work-region">
-    <nav id="project-navigation" class="project-navigation shell" aria-label="Project navigator"><a href="#work">Overview</a></nav>
     <section class="selected shell" id="work" tabindex="-1" aria-labelledby="work-heading"><div class="section-heading"><h2 id="work-heading">Research &amp; engineering projects</h2><span>Four selected projects</span></div><div class="project-grid" id="project-grid"></div></section>
     <section class="case-studies shell" aria-label="Project details"><div class="section-heading"><h2>Project details</h2><span>Contributions, methods and results</span></div><div id="project-details"></div></section>
     </div>

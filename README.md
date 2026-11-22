@@ -1,51 +1,43 @@
 # Satyam Bishwakarma — portfolio
 
-A dependency-free, static portfolio with a concise opening, project previews linked to detailed case studies, light/dark themes, and optional ambient motion. No external fonts, tracking, CDN scripts, or build step.
+A static portfolio with React navigation, GSAP section reveals, and a Vite production build. Dependencies are bundled locally; there are no CDN scripts, external fonts, or tracking. The introduction, profile and project source remain easy to edit.
 
-## Preview
+## Preview and build
 
-From this directory run `python3 -m http.server 4173` and visit http://localhost:4173. Opening `index.html` directly also works. Test light and dark themes, narrow screens, keyboard navigation, reduced motion, and every link before publishing.
+Run `npm ci`, then `npm run dev` and open http://127.0.0.1:4173/. For a production preview, run `npm run build` followed by `npm run preview`, or serve `dist/` with a static server. Opening the source HTML directly is unsupported.
 
-## Fill in the placeholders
+`src/Navigation.jsx` owns the single navigation component. Work leads to the overview; its adjacent project-picker button gives access to every project. The picker supports native links, current-project state, outside-click dismissal and Escape focus return. About and Connect use the same navigation styling. There is no second project navigation bar.
 
-- Edit `content.js` for social URLs, project copy, repository links, and image paths. `null` social URLs render as clearly unavailable placeholders rather than broken links. GitHub is linked; X, LinkedIn, and CV await your final URLs. Use an HTTPS URL for a CV, or add a PDF under `assets/` and use its relative path.
-- Replace `assets/composition.svg`, `assets/infrastructure.svg`, and `assets/water.svg` with actual screenshots or research figures. Current original illustrations are explicitly labeled; they are not screenshots or experimental plots. Update each image's `alt`, and change the illustrative captions in `app.js` once real assets are in place.
-- Edit the introduction, education, about section, and metadata in `index.html`. Copy was grounded in the local GitHub profile README; verify research status and any reported results before launch.
-- Remove the `noindex, nofollow` robots meta tag in `index.html` when the portfolio is ready to appear in search results.
-- Colors and responsive layout live in `styles.css`. Porcelain is the primary light surface, carbon supplies structure and typography, and ultramarine is reserved for emphasis. Dark mode reverses the surface and ink roles. These are compositional proportions, not strict pixel counts.
+`src/RevealEffects.jsx` uses GSAP for short, one-time, staggered entrances. Text travels 14px without blur; figures travel 20px with a 2px blur. Content remains readable before scripts load. Direct project destinations settle immediately, and manual pause or OS reduced motion cancels reveals and clears their styles.
 
-## GitHub Pages (maintenance mode)
+`motion.js` owns card lighting and the custom arrow cursor. The arrow has a theme-aware ultramarine stroke and drop shadow aligned to its actual tip. There is no circular or offset cursor glow. It restores the native cursor for touch, editable fields, window blur, manual pause and OS reduced motion.
 
-The user-site repository is `satyam-bishwakarma/satyam-bishwakarma.github.io`, serving `https://satyam-bishwakarma.github.io/`. The public site is intended to show only `maintenance/index.html` until content is ready. The full portfolio is available locally and in source.
+## Editing content
 
-`.github/workflows/pages.yml` is manual only. Pages is configured for GitHub Actions; pushing changes does not automatically deploy. When placeholders are complete, run **Actions → Publish portfolio → Run workflow**, choose mode **portfolio**, and enter `PUBLISH`. To return to the preparation screen, run with **maintenance** mode (the default). Check the workflow result and visit the live URL. Only the selected site's files enter the deployment artifact; tests and source documentation are excluded.
+- `content.js`: all four projects, descriptions, evidence, image paths and social URLs. Unknown URLs stay `null`, producing unavailable placeholders. GitHub, X and LinkedIn are populated; CV is pending. A CV may use an HTTPS URL or a relative PDF under `assets/`.
+- `index.html`: introduction, profile, education, toolkit and metadata. Facts were checked against the GitHub profile README; verify research status and reported results before launch.
+- `assets/`: replace the original representative illustrations with actual project screenshots or research figures. Update image alt text and illustrative captions in `app.js` when replacing them.
+- `styles.css` and `effects.css`: porcelain/carbon/ultramarine tokens, layout, card interactions and cursor styling. `src/navigation.css` owns the React navigation visuals.
+- Remove `noindex, nofollow` from `index.html` when ready for search indexing.
 
-GitHub automatically enabled legacy branch publishing when the user-site repository was created and briefly deployed the first push. That build was cancelled, publishing was switched to Actions, and a maintenance deployment replaced the unfinished portfolio. The API refused direct Pages deactivation, so maintenance mode keeps unfinished content out of the current public website while preserving the source.
+About uses a shared grid and 8/16/24/32/48/64px spacing steps. These are project design choices informed by Apple's alignment and grouping guidance, not Apple-mandated web dimensions.
 
-## Design references
+## GitHub Pages — preparation mode
 
-The project-card screenshot supplied by the user informed the preview grid; the local Lumora prompt informed spacing and section rhythm. Second-pass live browser review covered React Bits' [Spotlight Card](https://reactbits.dev/components/spotlight-card), [Aurora](https://reactbits.dev/backgrounds/aurora), and the [ReactDrops](https://reactdrops.dev) homepage. Original effects in `effects.css` and `motion.js` adapt those ideas: pointer-following card illumination, slight depth, an ambient ultramarine wash, contour movement, path tracing, and one-time entrance transitions. No library code or third-party assets were copied.
+Repository: [satyam-bishwakarma/satyam-bishwakarma.github.io](https://github.com/satyam-bishwakarma/satyam-bishwakarma.github.io). Public address: https://satyam-bishwakarma.github.io/.
 
-[Apple typography guidance](https://developer.apple.com/design/human-interface-guidelines/typography) informed hierarchy and the native system font. A likely match for the originally ambiguous better-typography reference is [Jakub Krehel's skill](https://github.com/jakubkrehel/skills/blob/main/skills/better-typography/SKILL.md), reviewed on the second pass. Its guidance informed balanced headings, paragraph wrapping, rem-based text roles, and readable line measures.
+The public site currently shows only `maintenance/index.html`. Pushing source does not deploy. To launch the portfolio, use **Actions → Publish portfolio → Run workflow**, choose **portfolio**, and enter `PUBLISH`. To restore the preparation screen, choose **maintenance**, the default mode. The workflow installs locked dependencies, builds Vite output, and stages either `dist/` or the maintenance HTML. Tests and source documents are excluded from deployment.
 
-Motion respects the operating system's reduced-motion preference even when the manual motion setting is enabled. Theme and manual motion choices persist locally when browser storage is available. Project links and social content are created using DOM text nodes; external links accept only HTTP(S).
+During initial setup GitHub auto-enabled legacy user-site publishing and briefly deployed the first push. It was switched to manual Actions publishing and replaced with the preparation screen; the API refused direct Pages deactivation.
 
 ## Verification
 
-With the preview server running on port 4173, run `node tests/smoke.mjs`. The script uses the locally installed Playwright and Brave; override `PLAYWRIGHT_MODULE` and `BROWSER_PATH` for another machine, and `PORTFOLIO_URL` for another preview URL. It checks desktop/mobile layout, project navigation, asset loading, theme/motion persistence, reduced motion, keyboard focus, storage failure, and placeholders. Screenshots are generated locally under `qa/` and excluded from Git; `qa/test-results.json` records the most recent run. No numerical coverage claim is made for this browser smoke suite.
+With a preview running on port 4173, run `node tests/smoke.mjs`. Set `PLAYWRIGHT_MODULE` and `BROWSER_PATH` for the local Playwright installation and browser executable, or `PORTFOLIO_URL` for another server. The current setup uses installed Playwright and Brave.
 
-## Profile and navigation update
+The suite checks desktop/mobile layout, asset loading, native project links, the single React navigation and project picker, keyboard dismissal/focus, reading-position stability, theme symbols and persistence, reduced motion, GSAP pause cleanup, cursor appearance/restoration, storage failure, and placeholders. Screenshots are generated under `qa/` and excluded from Git. `qa/test-results.json` records the latest run; no numerical coverage claim is made.
 
-The profile content was checked against the current GitHub profile README on 22 November 2026. All four projects are represented, including DRM-YOLO with its planned-submission status. All four projects share the same overview grid. Confirmed X and LinkedIn URLs now work; CV remains unavailable until supplied. The about section includes the complete toolkit, quantitative foundations and education. Headings foreground identity, project names and background rather than slogans.
+## Design references
 
-The work navigator starts above the overview cards and stays available through the project details. Overview is active while reading the cards, then the active state follows each project. It hides and clears its selection at About; anchor offsets follow its responsive height. Its active state follows scrolling using `aria-current="location"`; anchors preserve deep links and browser history. Destination sections receive keyboard focus. The theme control shows the action: sun to switch to light, moon to switch to dark, including system and stored preference changes.
+The supplied project-grid screenshot and local Lumora prompt informed the composition. The supplied React Bits PillNav and AnimatedContent sources informed the interaction patterns; the implementation uses React navigation and GSAP reveals tailored to this portfolio rather than copying every option.
 
-About uses full-width content bands: profile and education, foundations and interests, then a three-column toolkit on desktop. A small ultramarine pointer glow complements the native cursor on fine-pointer devices; it expands over links/buttons and is disabled by motion pause or OS reduced motion.
-
-## Navigation hierarchy and spacing
-
-The global header remains available for Work, About and Connect, with its current section indicated. The project index is subordinate: one flat row with an underline, directly beneath the header while browsing work. Compact mobile labels keep all project choices readable; full accessible names remain available. Anchor offsets account for both rows. About uses a shared two-column grid for profile, credentials and foundations, followed by a three-column toolkit. Group spacing follows 8/16/24/32/48/64px steps; these are project design choices, informed by [Apple layout guidance](https://developer.apple.com/design/human-interface-guidelines/layout), not Apple-mandated web measurements.
-
-## Supplied component adaptations
-
-Reviewed the supplied React Bits PillNav and AnimatedContent sources. The portfolio remains plain HTML/CSS/JS: global navigation adapts the rising fill, rolling label and sliding active dot; section content uses short, staggered native Web Animations. These are behavior adaptations rather than imported React components. Text moves 14px without blur; figures move 20px with a 2px blur and subtle scale, once only. Deep-linked project targets are shown immediately. No scrub, disappearance or scroll blocking is used. Reveals remain visible if scripting fails and cancel under manual pause or reduced motion. The cursor effect is an offset, diffuse elliptical glow with no outlined circle at the pointer tip.
+References reviewed: [React Bits](https://reactbits.dev), [ReactDrops](https://reactdrops.dev), [Apple layout guidance](https://developer.apple.com/design/human-interface-guidelines/layout), [Apple typography guidance](https://developer.apple.com/design/human-interface-guidelines/typography), and [Jakub Krehel's better-typography skill](https://github.com/jakubkrehel/skills/blob/main/skills/better-typography/SKILL.md), a likely match for the originally ambiguous typography reference.

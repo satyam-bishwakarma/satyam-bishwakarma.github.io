@@ -37,6 +37,13 @@ async function visit(context) {
   return { page, errors };
 }
 
+async function clickStickyControl(page, control) {
+  // Locator auto-scroll can move a sticky control despite it already being visible.
+  const box = await control.boundingBox();
+  assert.ok(box && box.y >= 0, 'Sticky control must already be in the viewport');
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+}
+
 try {
   for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
     await check(`layout and project navigation at ${viewport.width}x${viewport.height}`, async () => {
@@ -71,7 +78,7 @@ try {
         await page.screenshot({ path: `${artifacts}${viewport.width}x${viewport.height}.png`, fullPage: true });
         await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
         await page.waitForFunction(() => document.querySelector('#about').getBoundingClientRect().top <= document.querySelector('.site-header').getBoundingClientRect().height + 28);
-        assert.equal(await page.locator('#project-navigation').isVisible(), false, 'Detail navigation must be absent at About');
+        assert.equal(await page.locator('#project-navigation').count(), 0, 'There must be no second project navigation bar');
         await page.screenshot({ path: `${artifacts}about-${viewport.width}.png` });
       } finally { await context.close(); }
     });
@@ -145,47 +152,55 @@ try {
       const spot = await card.evaluate(node => node.style.getPropertyValue('--spot-x'));
       assert.ok(spot.endsWith('px'));
       assert.equal(await page.locator('.cursor-halo').getAttribute('data-active'), 'true');
-      assert.equal(await page.locator('.cursor-halo').evaluate(node => getComputedStyle(node, '::before').borderTopWidth), '0px', 'Cursor light must have no outlined ring');
+      assert.equal(await page.locator('.cursor-halo path').count(), 1, 'Custom cursor is an arrow silhouette');
+      assert.notEqual(await page.locator('.cursor-halo path').evaluate(node => getComputedStyle(node).stroke), 'none');
+      assert.equal(await page.locator('html').getAttribute('data-custom-cursor'), 'on');
       await page.locator('#motion').click();
       assert.equal(await card.evaluate(node => node.style.getPropertyValue('--spot-x')), '');
       assert.equal(await page.locator('.cursor-halo').evaluate(node => getComputedStyle(node).display), 'none');
       assert.equal(await page.locator('.cursor-halo').getAttribute('data-active'), 'false');
+      assert.equal(await page.locator('html').getAttribute('data-custom-cursor'), null, 'Pause restores native cursor');
+      assert.ok(await page.locator('.intro-copy, .project-figure, .card-copy, .project-preview').evaluateAll(nodes => nodes.every(node => !node.style.transform && !node.style.filter && !node.style.opacity)), 'GSAP reveal styles are cleared when motion is paused');
       assert.equal(await page.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').length), 0);
       assert.equal(await page.locator('h1').isVisible(), true);
     } finally { await context.close(); }
   });
 
-  await check('project navigator jumps between distant details and tracks active section', async () => {
+  await check('one React navigation handles projects, overview, keyboard and page sections', async () => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
     try {
-      const { page } = await visit(context);
+      const { page, errors } = await visit(context);
+      const nav = page.getByRole('navigation', { name: 'Main navigation', exact: true });
+      assert.equal(await page.getByRole('navigation').count(), 1, 'One navigation landmark, no second bar');
       await page.locator('.project-card').last().click();
-      await page.waitForFunction(() => location.hash === '#water-quality');
-      const navigator = page.getByRole('navigation', { name: 'Project navigator' });
-      await navigator.getByRole('link', { name: 'Read Scalable image-processing infrastructure' }).click();
+      const picker = nav.getByRole('button', { name: 'Browse projects' });
+      await clickStickyControl(page, picker);
+      await nav.getByRole('link', { name: 'Read Scalable image-processing infrastructure' }).click();
       await page.waitForFunction(() => location.hash === '#image-infrastructure');
-      await page.waitForFunction(() => document.querySelector('#project-navigation a[aria-current]')?.getAttribute('href') === '#image-infrastructure');
-      const bounds = await navigator.boundingBox();
-      const dot = page.locator('.pill-active-dot');
-      assert.equal(await dot.evaluate(node => getComputedStyle(node).opacity), '1', 'Active global section has a visible indicator');
-      const headerBox = await page.locator('.site-header').boundingBox();
-      assert.ok(Math.abs(bounds.y - headerBox.height) < 2, 'Project index sits directly below the global header');
-      await navigator.getByRole('link', { name: 'Read DRM-YOLO object detection' }).click();
-      assert.equal(await page.locator('#drm-yolo').isVisible(), true);
+      assert.equal(await picker.getAttribute('aria-expanded'), 'false');
+      await clickStickyControl(page, picker);
+      await nav.getByRole('link', { name: 'Read DRM-YOLO object detection' }).click();
+      await page.waitForFunction(() => location.hash === '#drm-yolo');
+      await page.waitForFunction(() => {
+        const top = document.querySelector('#drm-yolo').getBoundingClientRect().top;
+        const header = document.querySelector('.site-header').getBoundingClientRect().height;
+        return top >= header && top <= header + 30;
+      }, null, { timeout: 5000 });
+      const readingPosition = await page.evaluate(() => scrollY);
+      await clickStickyControl(page, picker);
+      assert.equal(await page.evaluate(() => scrollY), readingPosition, 'Opening project picker preserves reading position');
       await page.screenshot({ path: `${artifacts}navigator-mobile.png` });
-      await navigator.getByRole('link', { name: 'Overview', exact: true }).click();
-      await page.waitForFunction(() => document.querySelector('#project-navigation a[href="#work"]').getAttribute('aria-current') === 'location');
-      assert.equal(await navigator.isVisible(), true, 'Navigator begins above the overview grid');
-      assert.equal(await page.getByRole('navigation', {name:'Main navigation',exact:true}).getByRole('link',{name:'Work',exact:true}).getAttribute('aria-current'), 'location');
-      const navBox = await navigator.boundingBox();
-      const gridBox = await page.locator('#project-grid').boundingBox();
-      assert.ok(gridBox.y > navBox.y + navBox.height, 'Overview grid belongs below the navigator');
-      assert.equal(await page.locator('.project-card').count(), 4, 'All projects share the overview grid');
-      await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
-      await page.waitForFunction(() => location.hash === '#about');
-      assert.equal(await navigator.isVisible(), false, 'Project navigation must not appear in About');
-      assert.equal(await page.getByRole('navigation', {name:'Main navigation',exact:true}).getByRole('link',{name:'About',exact:true}).getAttribute('aria-current'), 'location');
-      assert.equal(await navigator.locator('[aria-current]').count(), 0, 'About must not carry a stale project selection');
+      await page.keyboard.press('Escape');
+      assert.equal(await picker.getAttribute('aria-expanded'), 'false');
+      assert.equal(await picker.evaluate(node => node === document.activeElement), true);
+      await clickStickyControl(page, picker);
+      await nav.getByRole('link', { name: /All projects/ }).click();
+      await page.waitForFunction(() => location.hash === '#work');
+      assert.equal(await page.locator('.project-card').count(), 4);
+      await nav.getByRole('link', { name: 'About', exact: true }).click();
+      await page.waitForFunction(() => document.querySelector('a[href="#about"][aria-current]') !== null);
+      assert.equal(await picker.getAttribute('aria-expanded'), 'false');
+      assert.deepEqual(errors, []);
     } finally { await context.close(); }
   });
 

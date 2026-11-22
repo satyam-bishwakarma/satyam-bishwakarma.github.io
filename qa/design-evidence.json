@@ -1,16 +1,16 @@
 {
-  "contract": "qa/design-contract.md: concise first screen, anchored project details, restrained motion, themes, honest placeholders and manual publishing.",
+  "contract": "Latest contract: one React global navigation with project picker; no second bar. React/GSAP build with progressive reveals; arrow cursor with ultramarine edge and native-cursor restoration.",
   "targetViewports": [
     "1440x900",
     "390x844"
   ],
   "accessibility": {
     "status": "pass",
-    "evidence": "Playwright verified keyboard skip-link focus and visible focus outline, functional labelled controls, OS reduced-motion suppression, working controls with unavailable local storage, and no dead placeholder links. Source and rendered review checked legible body text, theme contrast and representative-image labels. This is a focused review, not a full WCAG certification. Second pass: pointer spotlight response tested; manual pause clears card variables and stops all running animations. Seven browser checks pass. Profile update: nine browser checks pass, including mobile cross-project jumps and active aria-current tracking, plus actual theme SVG changes under system and persisted preferences. Cursor pause checked via computed display:none and inactive state; native cursor remains available. Hierarchy revision checks global Work/About state and focused skip-link hit testing above sticky header. Supplied-effects adaptation: native link semantics and labels preserved in rolling pill menu; manual pause still stops animations, and cursor pseudo-element verified to have no border."
+    "evidence": "Playwright verified keyboard skip-link focus and visible focus outline, functional labelled controls, OS reduced-motion suppression, working controls with unavailable local storage, and no dead placeholder links. Source and rendered review checked legible body text, theme contrast and representative-image labels. This is a focused review, not a full WCAG certification. Second pass: pointer spotlight response tested; manual pause clears card variables and stops all running animations. Seven browser checks pass. Profile update: nine browser checks pass, including mobile cross-project jumps and active aria-current tracking, plus actual theme SVG changes under system and persisted preferences. Cursor pause checked via computed display:none and inactive state; native cursor remains available. Hierarchy revision checks global Work/About state and focused skip-link hit testing above sticky header. Supplied-effects adaptation: native link semantics and labels preserved in rolling pill menu; manual pause still stops animations, and cursor pseudo-element verified to have no border. React migration: tested one navigation landmark, picker Escape/focus return, native project/overview/About links, GSAP inline-style cleanup when paused, and arrow cursor/native restoration. React and general source reviews completed; hybrid touch cursor fix applied."
   },
   "responsive": {
     "status": "pass",
-    "evidence": "Playwright found no horizontal overflow at 1440x900 and 390x844. Rendered screenshots inspected: full introduction and three project summaries fit desktop first screen; mobile stacks readable content and controls; diagrams remain uncropped. Refined effects preserve the existing layout and first-viewport card fit; updated desktop and mobile screenshots inspected. Organization revision: inspected four equal project cards and factual name-first hero; desktop About capture confirms project navigation absent. Latest layout inspected full-page on mobile plus desktop About: navigator precedes cards; About uses the entire width in grouped rows; project illustrations have intrinsic-height responsive sizing. Inspected updated desktop/mobile About captures: aligned shared columns and consistent group spacing; primary header and secondary index have separate visual levels. Reviewed desktop overview and mobile About with global pill navigation; compact controls fit without page overflow."
+    "evidence": "Playwright found no horizontal overflow at 1440x900 and 390x844. Rendered screenshots inspected: full introduction and three project summaries fit desktop first screen; mobile stacks readable content and controls; diagrams remain uncropped. Refined effects preserve the existing layout and first-viewport card fit; updated desktop and mobile screenshots inspected. Organization revision: inspected four equal project cards and factual name-first hero; desktop About capture confirms project navigation absent. Latest layout inspected full-page on mobile plus desktop About: navigator precedes cards; About uses the entire width in grouped rows; project illustrations have intrinsic-height responsive sizing. Inspected updated desktop/mobile About captures: aligned shared columns and consistent group spacing; primary header and secondary index have separate visual levels. Reviewed desktop overview and mobile About with global pill navigation; compact controls fit without page overflow. Inspected production Vite output at desktop and mobile; project picker fits viewport and direct pointer interaction preserves reading position."
   },
   "contentStates": {
     "loading": {
@@ -63,6 +63,11 @@
       "viewport": "1440x900",
       "artifact": "about-1440.png",
       "observation": "Inspected About: plain heading, profile and toolkit; project navigator absent, no stale project highlight."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "cursor-border.png",
+      "observation": "Inspected arrow silhouette, ultramarine stroke and shadow located at the actual pointer, with no offset glow or circular marker."
     }
   ]
 }
