@@ -199,30 +199,40 @@ try {
     } finally { await context.close(); }
   });
 
-  await check('project boundary resists then settles, and pause restores native scrolling', async () => {
+  await check('unequal projects scroll freely and settle only near their measured boundaries', async () => {
     const context = await browser.newContext({viewport:{width:1440,height:900}});
     try {
       const {page} = await visit(context);
-      const positionAtBoundary = () => page.evaluate(() => {
-        const next = document.querySelector('#image-infrastructure');
-        window.scrollTo({top:scrollY + next.getBoundingClientRect().top - innerHeight * 0.6,behavior:'instant'});
+      await page.locator('#compositional-vision').evaluate(node => {node.style.minHeight = '1800px';});
+      const middle = await page.evaluate(() => {
+        scrollTo({top:scrollY + document.querySelector('#compositional-vision').getBoundingClientRect().top + 250,behavior:'instant'});
         return scrollY;
       });
-      const before = await positionAtBoundary();
       await page.mouse.move(700,450);
-      await page.mouse.wheel(0,60);
-      await page.waitForTimeout(70);
-      const resisted = await page.evaluate(() => scrollY);
-      assert.ok(resisted - before > 10 && resisted - before < 40, 'Initial wheel movement is resisted near the boundary');
-      await page.mouse.wheel(0,80);
-      await page.waitForFunction(() => Math.abs(document.querySelector('#image-infrastructure').getBoundingClientRect().top - document.querySelector('.site-header').getBoundingClientRect().height - 24) < 3, null, {timeout:3000});
+      await page.mouse.wheel(0,40);
+      await page.waitForTimeout(450);
+      assert.ok(Math.abs(await page.evaluate(() => scrollY) - middle - 40) < 3, 'Middle of a long project stays native');
+      for (const id of ['image-infrastructure','drm-yolo','water-quality']) {
+        await page.evaluate(id => {
+          const target = scrollY + document.getElementById(id).getBoundingClientRect().top - document.querySelector('.site-header').getBoundingClientRect().height - 24;
+          scrollTo({top:target - 110,behavior:'instant'});
+        }, id);
+        await page.mouse.wheel(0,40);
+        await page.waitForFunction(id => document.documentElement.dataset.projectPull !== 'active' && Math.abs(document.getElementById(id).getBoundingClientRect().top - document.querySelector('.site-header').getBoundingClientRect().height - 24) < 3, id, {timeout:3000});
+      }
+      const nav = page.getByRole('navigation', {name:'Main navigation',exact:true});
+      const about = nav.getByRole('link', {name:'About',exact:true});
+      await about.hover();
+      assert.equal(await about.locator('.unified-nav__face').evaluate(node => getComputedStyle(node).transform), 'none', 'Hover does not roll the label');
       await page.locator('#motion').click();
-      const pausedBefore = await positionAtBoundary();
+      const paused = await page.evaluate(() => {
+        const target = scrollY + document.querySelector('#image-infrastructure').getBoundingClientRect().top - document.querySelector('.site-header').getBoundingClientRect().height - 24;
+        scrollTo({top:target-110,behavior:'instant'}); return scrollY;
+      });
       await page.mouse.move(700,450);
-      await page.mouse.wheel(0,60);
-      await page.waitForTimeout(120);
-      const nativeDistance = await page.evaluate(() => scrollY) - pausedBefore;
-      assert.ok(nativeDistance >= 50 && nativeDistance <= 70, 'Paused motion uses the native wheel distance');
+      await page.mouse.wheel(0,40);
+      await page.waitForTimeout(600);
+      assert.ok(Math.abs(await page.evaluate(() => scrollY) - paused - 40) < 3, 'Paused motion never settles');
     } finally {await context.close();}
   });
 

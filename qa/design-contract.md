@@ -29,3 +29,5 @@ Supplied-effects adaptation: PillNav-inspired behavior applies to the global nav
 Current migration supersedes earlier two-row navigation: React provides one global pill navigation and an accessible project picker. GSAP owns reveal effects, Vite bundles dependencies. Cursor is an arrow with ultramarine edge and shadow; native pointer is restored on pause/reduced motion/touch/editable fields.
 
 Latest preference: default system cursor only, no custom overlay or cursor effects. Single Projects disclosure contains Overview and all project links, alongside About and Connect.
+
+Latest scroll revision supersedes resistance: native passive wheel scroll; short idle settle uses actual content end and next start. Long projects remain freely scrollable. Navigator labels have no hover roll/fill.

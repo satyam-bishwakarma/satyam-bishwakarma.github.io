@@ -44,4 +44,6 @@ References reviewed: [React Bits](https://reactbits.dev), [ReactDrops](https://r
 
 ## Magnetic project transitions
 
-`src/ProjectTransitions.jsx` adds a short wheel/trackpad boundary corridor between detail sections on fine-pointer devices: initial movement is damped, then sustained input triggers a 0.65-second GSAP settle toward the next project. Upward transitions reveal the end of the previous project so long sections are not skipped. Outside these corridors scrolling is native. Opposite wheel input, pointer/keyboard actions, navigation, resize or focus loss cancel the pull. Manual motion pause and OS reduced motion disable it; touch scrolling stays native.
+`src/ProjectTransitions.jsx` preserves native wheel/trackpad scrolling and measures actual outgoing content and incoming section positions. After wheel input stops briefly, it can settle the final distance (at most 160px) to the next project once the outgoing content is visible. Upward settling reveals the previous project's end, preserving access to long sections. Every new wheel input, pointer/keyboard action, navigation, resize or focus loss cancels pending motion. Manual pause and OS reduced motion disable settling; touch remains native. No wheel events are blocked or damped.
+
+Navigation labels remain stationary on hover: there is no rolling text or rising fill animation.

@@ -30,7 +30,7 @@
       "status": "pass"
     },
     {
-      "name": "project boundary resists then settles, and pause restores native scrolling",
+      "name": "unequal projects scroll freely and settle only near their measured boundaries",
       "status": "pass"
     },
     {
