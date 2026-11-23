@@ -15,6 +15,7 @@ Run `npm ci`, then `npm run dev` and open http://127.0.0.1:4173/. For a producti
 ## Editing content
 
 - `content.js`: all four projects, descriptions, evidence, image paths and social URLs. Unknown URLs stay `null`, producing unavailable placeholders. GitHub, X and LinkedIn are populated; CV is pending. A CV may use an HTTPS URL or a relative PDF under `assets/`.
+  Each project's `heading` is its canonical title on cards and detail sections. Its `navLabel` supplies the shared short name for the project picker and Continue control; the picker also displays the full title. Phone headers show “Next” with the full destination in the accessible label.
 - `index.html`: introduction, profile, education, toolkit and metadata. Facts were checked against the GitHub profile README; verify research status and reported results before launch.
 - `assets/`: replace the original representative illustrations with actual project screenshots or research figures. Update image alt text and illustrative captions in `app.js` when replacing them.
 - `styles.css` and `effects.css`: porcelain/carbon/ultramarine tokens, layout, card interactions and cursor styling. `src/navigation.css` owns the React navigation visuals.

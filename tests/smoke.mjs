@@ -186,6 +186,15 @@ try {
       await page.locator('.project-card').last().click();
       const picker = nav.locator('.unified-nav__projects');
       await clickStickyControl(page, picker);
+      const projects = await page.evaluate(() => window.PORTFOLIO.projects);
+      for (const project of projects) {
+        const link = nav.getByRole('link', { name: `Read ${project.heading}`, exact: true });
+        assert.equal(await link.getAttribute('title'), project.heading);
+        assert.equal(await link.locator('span').textContent(), project.heading);
+        assert.equal(await link.evaluate(node => node.firstChild.textContent), project.navLabel);
+        assert.equal(await page.locator(`#${project.id} h3`).textContent(), project.heading);
+        assert.equal(await page.locator(`.project-card[href="#${project.id}"] h3`).textContent(), project.heading);
+      }
       await nav.getByRole('link', { name: 'Read Scalable image-processing infrastructure' }).click();
       await page.waitForFunction(() => location.hash === '#image-infrastructure');
       assert.equal(await picker.getAttribute('aria-expanded'), 'false');

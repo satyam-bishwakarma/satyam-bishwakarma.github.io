@@ -7,7 +7,7 @@ export default function NextSection({ projects }) {
   useEffect(() => {
     const stops = [
       { id: 'work', label: 'Project overview', shortLabel: 'Overview' },
-      ...projects.map((project, index) => ({ id: project.id, label: project.heading, shortLabel: ['Vision research', 'Cloud systems', 'DRM-YOLO', 'Water quality'][index] || 'Next project' })),
+      ...projects.map(project => ({ id: project.id, label: project.heading, shortLabel: project.navLabel || project.heading })),
       { id: 'about', label: 'About & background', shortLabel: 'About' },
       { id: 'connect', label: 'Contact & CV', shortLabel: 'Contact' }
     ];
@@ -46,7 +46,7 @@ export default function NextSection({ projects }) {
     const target = document.getElementById(destination.id);
     if (target) { target.tabIndex = -1; target.focus({ preventScroll: true }); }
   }}>
-    <span><span className="next-section__caption">Next</span><span className="next-section__label">{destination.label}</span><span className="next-section__compact">{destination.shortLabel}</span></span>
+    <span><span className="next-section__caption">Next</span><span className="next-section__label">{destination.shortLabel}</span><span className="next-section__compact">{destination.shortLabel}</span></span>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
   </a> : <span className="continue-complete">You’ve reached the end</span>}</div>, host);
 }

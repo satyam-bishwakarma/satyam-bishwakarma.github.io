@@ -1,11 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-const PROJECT_LABELS = {
-  'compositional-vision': 'Compositional vision',
-  'image-infrastructure': 'Cloud infrastructure',
-  'drm-yolo': 'DRM-YOLO',
-  'water-quality': 'Water quality'
-};
 const ITEMS = [{ id: 'work', label: 'Projects' }, { id: 'about', label: 'About' }, { id: 'connect', label: 'Connect' }];
 
 export default function Navigation({ projects }) {
@@ -126,9 +120,9 @@ export default function Navigation({ projects }) {
       {open && <div id="project-menu" className="unified-nav__menu" aria-label="Projects">
         <p className="unified-nav__caption">Research &amp; engineering</p>
         <a href="#work" onClick={navigate} aria-current={current.section === 'work' && !current.project ? 'location' : undefined} aria-label="Overview">Overview<span>All projects</span></a>
-        {projects.map(project => <a key={project.id} href={`#${project.id}`} aria-label={`Read ${project.heading}`}
+        {projects.map(project => <a key={project.id} href={`#${project.id}`} aria-label={`Read ${project.heading}`} title={project.heading}
           aria-current={current.project === project.id ? 'location' : undefined} onClick={navigate}>
-          {PROJECT_LABELS[project.id] || project.heading}<span>{project.category}</span>
+          {project.navLabel || project.heading}<span>{project.heading}</span>
         </a>)}
       </div>}
       </div>
