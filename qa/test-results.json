@@ -30,10 +30,6 @@
       "status": "pass"
     },
     {
-      "name": "unequal projects scroll freely and settle only near their measured boundaries",
-      "status": "pass"
-    },
-    {
       "name": "theme symbol follows theme, persisted preference, and system changes",
       "status": "pass"
     },

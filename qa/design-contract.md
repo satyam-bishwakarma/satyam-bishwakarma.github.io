@@ -31,3 +31,5 @@ Current migration supersedes earlier two-row navigation: React provides one glob
 Latest preference: default system cursor only, no custom overlay or cursor effects. Single Projects disclosure contains Overview and all project links, alongside About and Connect.
 
 Latest scroll revision supersedes resistance: native passive wheel scroll; short idle settle uses actual content end and next start. Long projects remain freely scrollable. Navigator labels have no hover roll/fill.
+
+Current scrolling preference supersedes earlier transition experiments: default native scrolling only; no magnetic controller, resistance, snapping or smooth anchor animation.

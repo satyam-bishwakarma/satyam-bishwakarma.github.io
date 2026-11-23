@@ -42,8 +42,6 @@ The supplied project-grid screenshot and local Lumora prompt informed the compos
 
 References reviewed: [React Bits](https://reactbits.dev), [ReactDrops](https://reactdrops.dev), [Apple layout guidance](https://developer.apple.com/design/human-interface-guidelines/layout), [Apple typography guidance](https://developer.apple.com/design/human-interface-guidelines/typography), and [Jakub Krehel's better-typography skill](https://github.com/jakubkrehel/skills/blob/main/skills/better-typography/SKILL.md), a likely match for the originally ambiguous typography reference.
 
-## Magnetic project transitions
+## Scrolling
 
-`src/ProjectTransitions.jsx` preserves native wheel/trackpad scrolling and measures actual outgoing content and incoming section positions. After wheel input stops briefly, it can settle the final distance (at most 160px) to the next project once the outgoing content is visible. Upward settling reveals the previous project's end, preserving access to long sections. Every new wheel input, pointer/keyboard action, navigation, resize or focus loss cancels pending motion. Manual pause and OS reduced motion disable settling; touch remains native. No wheel events are blocked or damped.
-
-Navigation labels remain stationary on hover: there is no rolling text or rising fill animation.
+Scrolling uses native browser behavior. There is no magnetic settling, wheel resistance, scroll snapping or custom scroll controller.
