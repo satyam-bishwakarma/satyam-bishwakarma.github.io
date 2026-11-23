@@ -51,6 +51,11 @@ try {
       try {
         const { page, errors } = await visit(context);
         assert.match(await page.locator('main').innerText(), /Satyam/i);
+        assert.ok(await page.locator('.site-header').evaluate(header => {
+          const first = header.querySelector('.header-inner').getBoundingClientRect();
+          const row = header.querySelector('.continue-row').getBoundingClientRect();
+          return row.top >= first.bottom && Math.abs(header.getBoundingClientRect().height - parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'))) < 2;
+        }), 'Continuation row sits below navigation and anchor offset matches actual header');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'No horizontal page overflow');
         await page.locator('img').evaluateAll(async images => {
           await Promise.all(images.map(image => {
@@ -207,6 +212,7 @@ try {
       for (const id of stops) {
         const next = page.locator('.next-section');
         await page.waitForFunction(id => document.querySelector('.next-section')?.getAttribute('href') === `#${id}`, id, {timeout:3000});
+        assert.ok(await next.evaluate(node => Boolean(node.closest('.site-header'))), 'Continue control belongs to the reserved header, not the reading area');
         const box = await next.boundingBox();
         assert.ok(box.x >= 0 && box.x + box.width <= 390 && box.y + box.height <= 844, 'Control stays in the viewport');
         await next.click();

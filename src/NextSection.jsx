@@ -23,22 +23,30 @@ export default function NextSection({ projects }) {
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     window.addEventListener('hashchange', schedule);
+    const headerElement = document.querySelector('.site-header');
+    const headerObserver = new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--header-height', `${headerElement.getBoundingClientRect().height}px`);
+      schedule();
+    });
+    headerObserver.observe(headerElement);
     update();
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       window.removeEventListener('hashchange', schedule);
+      headerObserver.disconnect();
     };
   }, [projects]);
 
-  if (!destination) return null;
-  return createPortal(<a className="next-section" href={`#${destination.id}`} aria-label={`Next: ${destination.label}`} onClick={event => {
+  const host = document.querySelector('.site-header');
+  if (!host) return null;
+  return createPortal(<div className="continue-row"><div className="continue-inner shell">{destination ? <a className="next-section" href={`#${destination.id}`} aria-label={`Next: ${destination.label}`} onClick={event => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     const target = document.getElementById(destination.id);
     if (target) { target.tabIndex = -1; target.focus({ preventScroll: true }); }
   }}>
-    <span><span className="next-section__caption">Next section</span><span className="next-section__label">{destination.label}</span></span>
+    <span><span className="next-section__caption">Continue to</span><span className="next-section__label">{destination.label}</span></span>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-  </a>, document.body);
+  </a> : <span className="continue-complete">You’ve reached the end</span>}</div></div>, host);
 }

@@ -35,3 +35,5 @@ Latest scroll revision supersedes resistance: native passive wheel scroll; short
 Current scrolling preference supersedes earlier transition experiments: default native scrolling only; no magnetic controller, resistance, snapping or smooth anchor animation.
 
 Explicit next-section link: fixed, labelled destination, native instant anchors and focus movement; no bounce or scroll interception; hides at Contact/page bottom.
+
+Current continuation design: integrated header row, not fixed corner overlay. Actual header height measured for anchors; no reading-area control; restrained hover/press feedback.
