@@ -10,10 +10,12 @@ const ITEMS = [{ id: 'work', label: 'Projects' }, { id: 'about', label: 'About' 
 
 export default function Navigation({ projects }) {
   const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [current, setCurrent] = useState({ section: 'work', project: null });
   const [indicator, setIndicator] = useState(0);
   const navRef = useRef(null);
   const toggleRef = useRef(null);
+  const menuRef = useRef(null);
   const linkRefs = useRef({});
 
   useEffect(() => {
@@ -50,16 +52,25 @@ export default function Navigation({ projects }) {
     const observer = new ResizeObserver(measure);
     observer.observe(navRef.current);
     return () => observer.disconnect();
-  }, [current.section]);
+  }, [current.section, menuOpen]);
 
   useEffect(() => {
-    if (!open) return undefined;
-    const dismiss = event => { if (!navRef.current.contains(event.target)) setOpen(false); };
+    const compact = matchMedia('(max-width: 1100px)');
+    const reset = () => { setMenuOpen(false); setOpen(false); };
+    compact.addEventListener('change', reset);
+    return () => compact.removeEventListener('change', reset);
+  }, []);
+
+  useEffect(() => {
+    if (!open && !menuOpen) return undefined;
+    const dismiss = event => {
+      if (!navRef.current.contains(event.target)) { setOpen(false); setMenuOpen(false); }
+    };
     const escape = event => {
       if (event.key === 'Escape') {
         event.preventDefault();
-        setOpen(false);
-        toggleRef.current.focus();
+        if (open) { setOpen(false); toggleRef.current.focus(); }
+        else { setMenuOpen(false); menuRef.current.focus(); }
       }
     };
     document.addEventListener('pointerdown', dismiss);
@@ -68,11 +79,12 @@ export default function Navigation({ projects }) {
       document.removeEventListener('pointerdown', dismiss);
       document.removeEventListener('keydown', escape);
     };
-  }, [open]);
+  }, [open, menuOpen]);
 
   function navigate(event) {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     setOpen(false);
+    setMenuOpen(false);
     const destination = document.getElementById(event.currentTarget.hash.slice(1));
     if (destination) {
       if (!destination.hasAttribute('tabindex')) destination.tabIndex = -1;
@@ -81,9 +93,17 @@ export default function Navigation({ projects }) {
   }
 
   return (
-    <nav ref={navRef} className="unified-nav" aria-label="Main navigation" onBlur={event => {
-      if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+    <nav ref={navRef} className="unified-nav" data-expanded={menuOpen} aria-label="Main navigation" onBlur={event => {
+      if (!event.currentTarget.contains(event.relatedTarget)) { setOpen(false); setMenuOpen(false); }
     }}>
+      <button ref={menuRef} type="button" className="unified-nav__menu-toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+        aria-expanded={menuOpen} aria-controls="navigation-panel" onClick={() => {
+          setMenuOpen(value => !value);
+          setOpen(false);
+        }}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={menuOpen ? 'm6 6 12 12M6 18 18 6' : 'M5 8h14M5 16h14'} /></svg>
+      </button>
+      <div id="navigation-panel" className="unified-nav__panel">
       <div className="unified-nav__track">
         {ITEMS.map(item => (
           item.id === 'work' ? (
@@ -111,6 +131,7 @@ export default function Navigation({ projects }) {
           {PROJECT_LABELS[project.id] || project.heading}<span>{project.category}</span>
         </a>)}
       </div>}
+      </div>
     </nav>
   );
 }

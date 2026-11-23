@@ -37,3 +37,5 @@ Current scrolling preference supersedes earlier transition experiments: default 
 Explicit next-section link: fixed, labelled destination, native instant anchors and focus movement; no bounce or scroll interception; hides at Contact/page bottom.
 
 Current continuation design: integrated header row, not fixed corner overlay. Actual header height measured for anchors; no reading-area control; restrained hover/press feedback.
+
+Latest header: one row only. Identity/navigation left, Continue center, theme/motion right. Compact menu below1101px retains access to all destinations, with nested dismissal/focus behavior. No second row and no floating overlay.

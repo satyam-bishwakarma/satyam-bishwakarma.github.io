@@ -37,7 +37,16 @@ async function visit(context) {
   return { page, errors };
 }
 
+async function ensureNavigation(page) {
+  const menu = page.getByRole('button', {name:'Open navigation',exact:true});
+  if (await menu.isVisible() && await menu.getAttribute('aria-expanded') === 'false') {
+    const box = await menu.boundingBox();
+    await page.mouse.click(box.x+box.width/2,box.y+box.height/2);
+  }
+}
+
 async function clickStickyControl(page, control) {
+  if (!await control.isVisible()) await ensureNavigation(page);
   // Locator auto-scroll can move a sticky control despite it already being visible.
   const box = await control.boundingBox();
   assert.ok(box && box.y >= 0, 'Sticky control must already be in the viewport');
@@ -52,10 +61,11 @@ try {
         const { page, errors } = await visit(context);
         assert.match(await page.locator('main').innerText(), /Satyam/i);
         assert.ok(await page.locator('.site-header').evaluate(header => {
-          const first = header.querySelector('.header-inner').getBoundingClientRect();
-          const row = header.querySelector('.continue-row').getBoundingClientRect();
-          return row.top >= first.bottom && Math.abs(header.getBoundingClientRect().height - parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'))) < 2;
-        }), 'Continuation row sits below navigation and anchor offset matches actual header');
+          const inner = header.querySelector('.header-inner').getBoundingClientRect();
+          const next = header.querySelector('#continue-navigation').getBoundingClientRect();
+          const prefs = header.querySelector('.preferences').getBoundingClientRect();
+          return inner.height <= 72 && next.right <= prefs.left && Math.abs(header.getBoundingClientRect().height - parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height'))) < 2;
+        }), 'Single row places Continue before right-side preferences with measured anchor offsets');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'No horizontal page overflow');
         await page.locator('img').evaluateAll(async images => {
           await Promise.all(images.map(image => {
@@ -81,6 +91,7 @@ try {
         await page.goto(baseURL, { waitUntil: 'networkidle' });
         await page.screenshot({ path: `${artifacts}${viewport.width}x${viewport.height}-viewport.png` });
         await page.screenshot({ path: `${artifacts}${viewport.width}x${viewport.height}.png`, fullPage: true });
+        await ensureNavigation(page);
         await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'About', exact: true }).click();
         await page.waitForFunction(() => document.querySelector('#about').getBoundingClientRect().top <= document.querySelector('.site-header').getBoundingClientRect().height + 28);
         assert.equal(await page.locator('#project-navigation').count(), 0, 'There must be no second project navigation bar');
@@ -173,7 +184,7 @@ try {
       const nav = page.getByRole('navigation', { name: 'Main navigation', exact: true });
       assert.equal(await page.getByRole('navigation').count(), 1, 'One navigation landmark, no second bar');
       await page.locator('.project-card').last().click();
-      const picker = nav.getByRole('button', { name: 'Projects', exact: true });
+      const picker = nav.locator('.unified-nav__projects');
       await clickStickyControl(page, picker);
       await nav.getByRole('link', { name: 'Read Scalable image-processing infrastructure' }).click();
       await page.waitForFunction(() => location.hash === '#image-infrastructure');
@@ -197,6 +208,7 @@ try {
       await nav.getByRole('link', { name: 'Overview', exact: true }).click();
       await page.waitForFunction(() => location.hash === '#work');
       assert.equal(await page.locator('.project-card').count(), 4);
+      await ensureNavigation(page);
       await nav.getByRole('link', { name: 'About', exact: true }).click();
       await page.waitForFunction(() => document.querySelector('a[href="#about"][aria-current]') !== null);
       assert.equal(await picker.getAttribute('aria-expanded'), 'false');

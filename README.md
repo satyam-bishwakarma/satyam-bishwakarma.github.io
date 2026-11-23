@@ -46,6 +46,10 @@ References reviewed: [React Bits](https://reactbits.dev), [ReactDrops](https://r
 
 Scrolling uses native browser behavior. There is no magnetic settling, wheel resistance, scroll snapping or custom scroll controller.
 
-## Explicit next-section control
+## Single-row header and continuation
 
-`src/NextSection.jsx` integrates a destination-labelled continuation link into the existing glass header, below the main navigation. Header space is part of the layout rather than an overlay on the reading area. ResizeObserver measures the actual header height for anchor offsets, including wrapped labels. The control progresses through overview, four projects, About and Contact with native instant anchors and keyboard focus movement. At page end the link disappears while the row keeps its height, avoiding layout jumps. Hover and press feedback is subtle and respects reduced motion. No floating corner control, bounce or scroll interception is used.
+One frosted header row groups identity and navigation on the left, the destination-labelled Continue action in the middle, and theme/motion preferences on the right. About belongs with page navigation rather than utility settings. Below 1101px, navigation collapses into an accessible menu; the Continue label shortens visually while retaining its full accessible name and title. No second header row or floating reading-area control is used.
+
+`src/NextSection.jsx` portals into a dedicated slot inside the header and measures its actual height for anchors. It advances through overview, four projects, About and Contact using instant native links and destination focus. The link disappears at page end without changing header height. The compact navigation supports nested Escape dismissal, outside-click dismissal, focus return and breakpoint reset.
+
+The grouping and responsive disclosure follow [Apple toolbar guidance](https://developer.apple.com/design/human-interface-guidelines/toolbars) and [layout guidance](https://developer.apple.com/design/human-interface-guidelines/layout). Centering Continue is a deliberate choice for this portfolio, not a universal placement rule. Additional layouts checked at 320px, 900px and 1101px.

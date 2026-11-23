@@ -6,10 +6,10 @@ export default function NextSection({ projects }) {
   const [destination, setDestination] = useState(null);
   useEffect(() => {
     const stops = [
-      { id: 'work', label: 'Project overview' },
-      ...projects.map(project => ({ id: project.id, label: project.heading })),
-      { id: 'about', label: 'About & background' },
-      { id: 'connect', label: 'Contact & CV' }
+      { id: 'work', label: 'Project overview', shortLabel: 'Overview' },
+      ...projects.map((project, index) => ({ id: project.id, label: project.heading, shortLabel: ['Vision research', 'Cloud systems', 'DRM-YOLO', 'Water quality'][index] || 'Next project' })),
+      { id: 'about', label: 'About & background', shortLabel: 'About' },
+      { id: 'connect', label: 'Contact & CV', shortLabel: 'Contact' }
     ];
     let frame = 0;
     const update = () => {
@@ -39,14 +39,14 @@ export default function NextSection({ projects }) {
     };
   }, [projects]);
 
-  const host = document.querySelector('.site-header');
+  const host = document.getElementById('continue-navigation');
   if (!host) return null;
-  return createPortal(<div className="continue-row"><div className="continue-inner shell">{destination ? <a className="next-section" href={`#${destination.id}`} aria-label={`Next: ${destination.label}`} onClick={event => {
+  return createPortal(<div className="continue-inner">{destination ? <a className="next-section" href={`#${destination.id}`} aria-label={`Next: ${destination.label}`} title={`Next: ${destination.label}`} onClick={event => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     const target = document.getElementById(destination.id);
     if (target) { target.tabIndex = -1; target.focus({ preventScroll: true }); }
   }}>
-    <span><span className="next-section__caption">Continue to</span><span className="next-section__label">{destination.label}</span></span>
+    <span><span className="next-section__caption">Next</span><span className="next-section__label">{destination.label}</span><span className="next-section__compact">{destination.shortLabel}</span></span>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-  </a> : <span className="continue-complete">You’ve reached the end</span>}</div></div>, host);
+  </a> : <span className="continue-complete">You’ve reached the end</span>}</div>, host);
 }
