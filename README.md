@@ -1,4 +1,4 @@
-# Satyam Bishwakarma — portfolio
+# Satyam Bishwakarma - portfolio
 
 A static portfolio with React navigation, GSAP section reveals, and a Vite production build. Dependencies are bundled locally; there are no CDN scripts, external fonts, or tracking. The introduction, profile and project source remain easy to edit.
 
