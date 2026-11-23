@@ -199,6 +199,33 @@ try {
     } finally { await context.close(); }
   });
 
+  await check('project boundary resists then settles, and pause restores native scrolling', async () => {
+    const context = await browser.newContext({viewport:{width:1440,height:900}});
+    try {
+      const {page} = await visit(context);
+      const positionAtBoundary = () => page.evaluate(() => {
+        const next = document.querySelector('#image-infrastructure');
+        window.scrollTo({top:scrollY + next.getBoundingClientRect().top - innerHeight * 0.6,behavior:'instant'});
+        return scrollY;
+      });
+      const before = await positionAtBoundary();
+      await page.mouse.move(700,450);
+      await page.mouse.wheel(0,60);
+      await page.waitForTimeout(70);
+      const resisted = await page.evaluate(() => scrollY);
+      assert.ok(resisted - before > 10 && resisted - before < 40, 'Initial wheel movement is resisted near the boundary');
+      await page.mouse.wheel(0,80);
+      await page.waitForFunction(() => Math.abs(document.querySelector('#image-infrastructure').getBoundingClientRect().top - document.querySelector('.site-header').getBoundingClientRect().height - 24) < 3, null, {timeout:3000});
+      await page.locator('#motion').click();
+      const pausedBefore = await positionAtBoundary();
+      await page.mouse.move(700,450);
+      await page.mouse.wheel(0,60);
+      await page.waitForTimeout(120);
+      const nativeDistance = await page.evaluate(() => scrollY) - pausedBefore;
+      assert.ok(nativeDistance >= 50 && nativeDistance <= 70, 'Paused motion uses the native wheel distance');
+    } finally {await context.close();}
+  });
+
   await check('theme symbol follows theme, persisted preference, and system changes', async () => {
     const context = await browser.newContext({ colorScheme: 'light' });
     try {

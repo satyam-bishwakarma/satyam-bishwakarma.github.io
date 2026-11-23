@@ -41,3 +41,7 @@ The suite checks desktop/mobile layout, asset loading, native project links, the
 The supplied project-grid screenshot and local Lumora prompt informed the composition. The supplied React Bits PillNav and AnimatedContent sources informed the interaction patterns; the implementation uses React navigation and GSAP reveals tailored to this portfolio rather than copying every option.
 
 References reviewed: [React Bits](https://reactbits.dev), [ReactDrops](https://reactdrops.dev), [Apple layout guidance](https://developer.apple.com/design/human-interface-guidelines/layout), [Apple typography guidance](https://developer.apple.com/design/human-interface-guidelines/typography), and [Jakub Krehel's better-typography skill](https://github.com/jakubkrehel/skills/blob/main/skills/better-typography/SKILL.md), a likely match for the originally ambiguous typography reference.
+
+## Magnetic project transitions
+
+`src/ProjectTransitions.jsx` adds a short wheel/trackpad boundary corridor between detail sections on fine-pointer devices: initial movement is damped, then sustained input triggers a 0.65-second GSAP settle toward the next project. Upward transitions reveal the end of the previous project so long sections are not skipped. Outside these corridors scrolling is native. Opposite wheel input, pointer/keyboard actions, navigation, resize or focus loss cancel the pull. Manual motion pause and OS reduced motion disable it; touch scrolling stays native.

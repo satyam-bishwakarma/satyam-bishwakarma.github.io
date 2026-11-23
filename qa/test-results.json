@@ -30,6 +30,10 @@
       "status": "pass"
     },
     {
+      "name": "project boundary resists then settles, and pause restores native scrolling",
+      "status": "pass"
+    },
+    {
       "name": "theme symbol follows theme, persisted preference, and system changes",
       "status": "pass"
     },
