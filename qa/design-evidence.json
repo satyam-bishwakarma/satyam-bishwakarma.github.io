@@ -6,11 +6,11 @@
   ],
   "accessibility": {
     "status": "pass",
-    "evidence": "Nine browser checks cover native cursor without a custom overlay, accessible Projects disclosure, Escape/focus return, native project links, theme preferences, reduced motion, pause and GSAP cleanup, keyboard skip link and storage failure. React source review approved. Latest revision: native passive wheel scrolling with optional measured boundary settle; no hover label transforms or fill animation. Magnetic controller removed entirely; native scrolling and instant native anchor navigation restored."
+    "evidence": "Nine browser checks cover native cursor without a custom overlay, accessible Projects disclosure, Escape/focus return, native project links, theme preferences, reduced motion, pause and GSAP cleanup, keyboard skip link and storage failure. React source review approved. Latest revision: native passive wheel scrolling with optional measured boundary settle; no hover label transforms or fill animation. Magnetic controller removed entirely; native scrolling and instant native anchor navigation restored. Explicit next-section link tested through all seven destinations, keyboard focus at every target and automatic hiding at page end; ten browser checks pass."
   },
   "responsive": {
     "status": "pass",
-    "evidence": "Desktop and mobile captures reviewed: single Projects dropdown, no second navigation bar, no page overflow, readable project and About content. Boundary tests cover all three transitions plus a project enlarged to 1800px, checking free mid-section scrolling and pause behavior. Previous transition experiments superseded by default native scrolling."
+    "evidence": "Desktop and mobile captures reviewed: single Projects dropdown, no second navigation bar, no page overflow, readable project and About content. Boundary tests cover all three transitions plus a project enlarged to 1800px, checking free mid-section scrolling and pause behavior. Previous transition experiments superseded by default native scrolling. Inspected destination-labelled fixed control on mobile; its viewport bounds are tested at every stop."
   },
   "contentStates": {
     "loading": {

@@ -45,3 +45,7 @@ References reviewed: [React Bits](https://reactbits.dev), [ReactDrops](https://r
 ## Scrolling
 
 Scrolling uses native browser behavior. There is no magnetic settling, wheel resistance, scroll snapping or custom scroll controller.
+
+## Explicit next-section control
+
+`src/NextSection.jsx` renders a compact destination-labelled link at the bottom-right of the viewport, progressing through overview, four projects, About and Contact. Native instant anchors preserve plain scrolling and move keyboard focus to the destination. It hides at Contact/page end; ordinary scrolling is never intercepted. There is no bounce or forced viewport-height layout. A React portal keeps its fixed positioning independent of the glass header.

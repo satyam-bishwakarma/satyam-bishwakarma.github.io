@@ -199,6 +199,25 @@ try {
     } finally { await context.close(); }
   });
 
+  await check('next-section control names destinations, advances and hides at contact', async () => {
+    const context = await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
+    try {
+      const {page} = await visit(context);
+      const stops = ['work','compositional-vision','image-infrastructure','drm-yolo','water-quality','about','connect'];
+      for (const id of stops) {
+        const next = page.locator('.next-section');
+        await page.waitForFunction(id => document.querySelector('.next-section')?.getAttribute('href') === `#${id}`, id, {timeout:3000});
+        const box = await next.boundingBox();
+        assert.ok(box.x >= 0 && box.x + box.width <= 390 && box.y + box.height <= 844, 'Control stays in the viewport');
+        await next.click();
+        await page.waitForFunction(id => location.hash === `#${id}`, id);
+        assert.equal(await page.locator(':focus').getAttribute('id'), id, 'Focus follows the destination');
+      }
+      await page.waitForFunction(() => !document.querySelector('.next-section'), null, {timeout:3000});
+      assert.equal(await page.locator('html').evaluate(node => getComputedStyle(node).scrollBehavior), 'auto');
+    } finally {await context.close();}
+  });
+
   await check('theme symbol follows theme, persisted preference, and system changes', async () => {
     const context = await browser.newContext({ colorScheme: 'light' });
     try {

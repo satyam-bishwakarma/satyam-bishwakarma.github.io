@@ -30,6 +30,10 @@
       "status": "pass"
     },
     {
+      "name": "next-section control names destinations, advances and hides at contact",
+      "status": "pass"
+    },
+    {
       "name": "theme symbol follows theme, persisted preference, and system changes",
       "status": "pass"
     },
